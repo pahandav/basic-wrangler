@@ -23,7 +23,7 @@ pip install pyperclip
 bw <BASIC Type> <filename>
 ```
 
-The BASIC Type is the dialect of BASIC that you wish to use. You can find all the current definitions in [`basdefs.py`](basdefs.py). When in doubt, specify bascom, as it's the closest thing to a generic version. It will typically output to `<filename-out>.bas`. You can then open the file and paste the code into an emulator.
+The BASIC Type is the dialect of BASIC that you wish to use. You can find all the current definitions in [`basdefs.py`](basdefs.py). When in doubt, specify bascom, as it's the closest thing to a generic version. It will output to `<filename-out>.bas` unless you specify an output file name with `-o`. You can then either tokenize or transfer the file into a disk image or you can paste the code into an emulator if you used the paste mode.
 
 ## Special Notes
 
@@ -84,7 +84,7 @@ Your file will now be reformatted as `<file name>.dat`
 - [ ] Preprocessor macros like includes and ifs
 - [ ] Renaming variables
 - [ ] Support for external tokenizers by accounting for how many bytes each token uses
-- [ ] Support for output to files that can be transferred directly into disk images
+- [x] Support for output to files that can be transferred directly into disk images
 
 ## Changelog
 

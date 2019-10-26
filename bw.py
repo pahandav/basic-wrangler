@@ -16,6 +16,7 @@ import basdefs
 # constants
 RE_QUOTES = r'(?=([^"]*"[^"]*")*[^"]*$)' # this selects things NOT inside quotes
 ALWAYS_FILE_FORMAT = ['bascom', 'amiga', 'riscos', 'gwbasic']
+CBM_BASIC = ['pet', 'vic20', 'c64', 'plus4', 'c128']
 
 def reformat_data_statements(input_file, basic_defs):
     """ Formats a newline-delimited list of values into DATA statements.
@@ -113,9 +114,10 @@ def crunch_line(line, basic_defs):
     """ This function crunches lines.
 
     If crunch is 0, it will join with spaces, and if crunch is 1 it will join with no spaces. """
-    while basic_defs.print_as_question and 'PRINT' in line:
-        print_index = line.index('PRINT')
-        line[print_index] = '?'
+    if not basic_defs.tokenize:
+        while basic_defs.print_as_question and 'PRINT' in line:
+            print_index = line.index('PRINT')
+            line[print_index] = '?'
     if basic_defs.crunch == 1:
         final_line = ''.join(line)
     else:
@@ -357,15 +359,23 @@ if basic_type in ['bascom', 'amiga'] or basic_type.startswith('zx'):
         working_file[index] = line[0:space_index.span()[1]] + ' ' + line[space_index.span()[1]:]
 
 # add newlines back in to the file
-final_file = '\n'.join(working_file)
-final_file = final_file + '\n'
+atascii_file = None
+if basic_type == 'atari' and not paste_format:
+    atascii_list = [a.encode() for a in working_file]
+    atascii_file = b'\x9b'.join(atascii_list)
+    atascii_file = atascii_file + b'\x9b'
+else:
+    final_file = '\n'.join(working_file)
+    final_file = final_file + '\n'
 
 # add a POKE statement to Atari pasted files to expand the display so more text can be pasted in
 if basic_type == 'atari' and paste_format:
     final_file = 'POKE 82,0\n' + final_file
 
 # adjust case if needed when pasting
-if paste_format and basic_defs.case == 'lower':
+if basic_type in CBM_BASIC:
+    final_file = final_file.lower()
+elif paste_format and basic_defs.case == 'lower':
     final_file = final_file.lower()
 elif paste_format and basic_defs.case == 'invert':
     final_file = final_file.swapcase()
@@ -397,8 +407,12 @@ if basic_type in ['amiga', 'riscos']:
 if paste_format:
     pyperclip.copy(final_file)
 if not paste_format or user_filename:
-    with open(output_filename, 'w', newline=newline_type) as file:
-        file.write(final_file)
+    if atascii_file:
+        with open(output_filename, 'wb') as file:
+            file.write(atascii_file)
+    else:
+        with open(output_filename, 'w', newline=newline_type) as file:
+            file.write(final_file)
 
 # output to console that the file has been saved
 if not paste_format or user_filename:

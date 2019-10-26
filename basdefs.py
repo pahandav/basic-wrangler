@@ -122,7 +122,7 @@ def bascom(paste_format, basic_line_length, numbering, increment, data_length=No
 def pet(paste_format, basic_line_length, numbering, increment, data_length=None):
     """ Commodore PET BASIC. """
     if basic_line_length is None and paste_format: basic_line_length = 79
-    elif basic_line_length is None: basic_line_length = 128
+    elif basic_line_length is None: basic_line_length = 252
     combine = True
     crunch = 1
     print_as_question = True
@@ -131,13 +131,13 @@ def pet(paste_format, basic_line_length, numbering, increment, data_length=None)
     case = 'lower'
     if increment is None: increment = 1
     abbreviate = False
-    tokenize = False
+    tokenize = True
     return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
 
 def apple2(paste_format, basic_line_length, numbering, increment, data_length=None):
     """ Applesoft BASIC. """
     if basic_line_length is None and paste_format: basic_line_length = 239
-    elif basic_line_length is None: basic_line_length = 128
+    elif basic_line_length is None: basic_line_length = 252
     combine = True
     crunch = 1
     print_as_question = True
@@ -146,7 +146,7 @@ def apple2(paste_format, basic_line_length, numbering, increment, data_length=No
     case = ''
     if increment is None: increment = 1
     abbreviate = False
-    tokenize = False
+    tokenize = True
     return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
 
 def trs80l1(paste_format, basic_line_length, numbering, increment, data_length=None):
@@ -166,7 +166,7 @@ def trs80l1(paste_format, basic_line_length, numbering, increment, data_length=N
 def trs80l2(paste_format, basic_line_length, numbering, increment, data_length=None):
     """ TRS-80 Level 2 BASIC. """
     if basic_line_length is None and paste_format: basic_line_length = 241
-    elif basic_line_length is None: basic_line_length = 128
+    elif basic_line_length is None: basic_line_length = 252
     combine = True
     crunch = 1
     print_as_question = True
@@ -181,7 +181,7 @@ def trs80l2(paste_format, basic_line_length, numbering, increment, data_length=N
 def trs80m4(paste_format, basic_line_length, numbering, increment, data_length=None):
     """ TRS-80 Model 4 BASIC. """
     if basic_line_length is None and paste_format: basic_line_length = 241
-    elif basic_line_length is None: basic_line_length = 128
+    elif basic_line_length is None: basic_line_length = 252
     combine = True
     crunch = 0
     print_as_question = True
@@ -211,7 +211,7 @@ def atari(paste_format, basic_line_length, numbering, increment, data_length=Non
 def ti99(paste_format, basic_line_length, numbering, increment, data_length=None):
     """ TI 99/4A BASIC. """
     if basic_line_length is None and paste_format: basic_line_length = 140
-    elif basic_line_length is None: basic_line_length = 128
+    elif basic_line_length is None: basic_line_length = 252
     combine = False
     crunch = 0
     print_as_question = False
@@ -220,14 +220,14 @@ def ti99(paste_format, basic_line_length, numbering, increment, data_length=None
     case = ''
     if increment is None: increment = 1
     abbreviate = False
-    tokenize = False
+    tokenize = True
     data_length = 96
     return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
 
 def ti99xb(paste_format, basic_line_length, numbering, increment, data_length=None):
     """ TI 99/4A Extended BASIC. """
     if basic_line_length is None and paste_format: basic_line_length = 140
-    elif basic_line_length is None: basic_line_length = 128
+    elif basic_line_length is None: basic_line_length = 252
     combine = True
     crunch = 0
     print_as_question = False
@@ -236,14 +236,14 @@ def ti99xb(paste_format, basic_line_length, numbering, increment, data_length=No
     case = ''
     if increment is None: increment = 1
     abbreviate = False
-    tokenize = False
+    tokenize = True
     data_length = 96
     return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
 
 def vic20(paste_format, basic_line_length, numbering, increment, data_length=None):
     """ Commodore VIC-20 BASIC. """
     if basic_line_length is None and paste_format: basic_line_length = 87
-    elif basic_line_length is None: basic_line_length = 128
+    elif basic_line_length is None: basic_line_length = 252
     combine = True
     crunch = 1
     print_as_question = True
@@ -252,7 +252,7 @@ def vic20(paste_format, basic_line_length, numbering, increment, data_length=Non
     case = 'lower'
     if increment is None: increment = 1
     abbreviate = False
-    tokenize = False
+    tokenize = True
     return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
 
 def coco(paste_format, basic_line_length, numbering, increment, data_length=None):
@@ -266,23 +266,7 @@ def coco(paste_format, basic_line_length, numbering, increment, data_length=None
     case = ''
     if increment is None: increment = 1
     abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def coco3(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Tandy CoCo 3 BASIC.
-
-    Note: This is a temporary definition, it will probably be deleted at some point. """
-    if basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 0
-    print_as_question = False
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
+    tokenize = True
     return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
 
 def apple3(paste_format, basic_line_length, numbering, increment, data_length=None):
@@ -302,7 +286,7 @@ def apple3(paste_format, basic_line_length, numbering, increment, data_length=No
 def c64(paste_format, basic_line_length, numbering, increment, data_length=None):
     """ Commodore 64 BASIC. """
     if basic_line_length is None and paste_format: basic_line_length = 80
-    elif basic_line_length is None: basic_line_length = 128
+    elif basic_line_length is None: basic_line_length = 252
     combine = True
     crunch = 1
     print_as_question = True
@@ -311,13 +295,13 @@ def c64(paste_format, basic_line_length, numbering, increment, data_length=None)
     case = 'lower'
     if increment is None: increment = 1
     abbreviate = False
-    tokenize = False
+    tokenize = True
     return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
 
 def plus4(paste_format, basic_line_length, numbering, increment, data_length=None):
     """ Commodore PLUS/4 BASIC. """
     if basic_line_length is None and paste_format: basic_line_length = 80
-    elif basic_line_length is None: basic_line_length = 128
+    elif basic_line_length is None: basic_line_length = 252
     combine = True
     crunch = 1
     print_as_question = True
@@ -326,13 +310,13 @@ def plus4(paste_format, basic_line_length, numbering, increment, data_length=Non
     case = 'lower'
     if increment is None: increment = 1
     abbreviate = False
-    tokenize = False
+    tokenize = True
     return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
 
 def c128(paste_format, basic_line_length, numbering, increment, data_length=None):
     """ Commodore 128 BASIC. """
     if basic_line_length is None and paste_format: basic_line_length = 80
-    elif basic_line_length is None: basic_line_length = 128
+    elif basic_line_length is None: basic_line_length = 252
     combine = True
     crunch = 1
     print_as_question = True
@@ -341,7 +325,7 @@ def c128(paste_format, basic_line_length, numbering, increment, data_length=None
     case = 'lower'
     if increment is None: increment = 1
     abbreviate = False
-    tokenize = False
+    tokenize = True
     return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
 
 def zx81(paste_format, basic_line_length, numbering, increment, data_length=None):
@@ -375,7 +359,7 @@ def zxspectrum(paste_format, basic_line_length, numbering, increment, data_lengt
 def bbc(paste_format, basic_line_length, numbering, increment, data_length=None):
     """ BBC Micro BASIC. """
     if basic_line_length is None and paste_format: basic_line_length = 239
-    elif basic_line_length is None: basic_line_length = 128
+    elif basic_line_length is None: basic_line_length = 252
     combine = True
     crunch = 0
     print_as_question = False
@@ -390,7 +374,7 @@ def bbc(paste_format, basic_line_length, numbering, increment, data_length=None)
 def oric(paste_format, basic_line_length, numbering, increment, data_length=None):
     """ Tangerine Oric BASIC. """
     if basic_line_length is None and paste_format: basic_line_length = 78
-    elif basic_line_length is None: basic_line_length = 128
+    elif basic_line_length is None: basic_line_length = 252
     combine = True
     crunch = 1
     print_as_question = True
@@ -399,13 +383,13 @@ def oric(paste_format, basic_line_length, numbering, increment, data_length=None
     case = ''
     if increment is None: increment = 1
     abbreviate = False
-    tokenize = False
+    tokenize = True
     return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
 
 def msx(paste_format, basic_line_length, numbering, increment, data_length=None):
     """ MSX BASIC. """
     if basic_line_length is None and paste_format: basic_line_length = 239
-    elif basic_line_length is None: basic_line_length = 128
+    elif basic_line_length is None: basic_line_length = 252
     combine = True
     crunch = 1
     print_as_question = True
@@ -434,8 +418,7 @@ def adam(paste_format, basic_line_length, numbering, increment, data_length=None
 
 def cpc(paste_format, basic_line_length, numbering, increment, data_length=None):
     """ Amstrad CPC BASIC. """
-    if basic_line_length is None and paste_format: basic_line_length = 186
-    elif basic_line_length is None: basic_line_length = 128
+    if basic_line_length is None: basic_line_length = 186
     combine = True
     crunch = 0
     print_as_question = True
