@@ -63,7 +63,7 @@ def fix_spacing(line):
     error_list = [('"', ';'), (';', '"'), ('<>', '"'), ('=', '"')]
     adjust_length = 0
     # remove spaces between one thing and another using the list of tuples above
-    for index, element in enumerate(error_list):
+    for index, _ in enumerate(error_list):
         for x in range(len(line)-1, -1, -1):
             if line[x-1].endswith(error_list[index][0]) and line[x].startswith(error_list[index][1]):
                 line[x-1] = line[x-1] + line[x]
@@ -93,7 +93,7 @@ def check_new_line(line):
 def determine_line_length(line, basic_defs, line_replacement):
     """ Algorithmically determine the length of a line. """
     current_line_length = 0
-    for index, element in enumerate(line):
+    for element in line:
         if element.startswith('`'):
             current_line_length = current_line_length + line_replacement
         elif element == 'PRINT' and basic_defs.print_as_question:
@@ -101,7 +101,7 @@ def determine_line_length(line, basic_defs, line_replacement):
         else:
             current_line_length = current_line_length + len(element)
     if basic_defs.crunch == 0:
-        for index, element in enumerate(line):
+        for element in line:
             current_line_length += 1
     return current_line_length
 
@@ -138,7 +138,7 @@ def renumber_basic_file(input_file, basic_defs, label_dict, line_replacement, ba
     output_file = list()
     current_line_number = basic_defs.numbering
     persistent_buffer, persistent_line_length = start_new_line(current_line_number)
-    for index, line in enumerate(input_file):
+    for line in input_file:
         logging.debug(persistent_buffer)
         # routine for jump targets
         if line.startswith('`'):
@@ -230,7 +230,7 @@ def populate_label_data(working_file):
     line_count = 0
     label_dict = dict()
     # add labels to dictionary
-    for index, line in enumerate(working_file):
+    for line in working_file:
         if line.startswith('`'):
             label_dict[line] = 0
             line_count += 1
@@ -254,15 +254,9 @@ def populate_label_data(working_file):
 def remove_comments(commented):
     """ This will remove comments from the file. """
     # strip whitespace
-    for index, line in enumerate(commented):
-        commented[index] = commented[index].strip()
+    stripped = [line.strip() for line in commented]
     # strip comments
-    uncommented = list()
-    for index, line in enumerate(commented):
-        temp = re.sub(RE_QUOTES + r"'.*?$", '', line)
-        temp = temp.rstrip()
-        temp = temp.rstrip(':')
-        uncommented.append(temp)
+    uncommented = [a.rstrip(':') for a in [b.rstrip() for b in [re.sub(RE_QUOTES + r"'.*?$", '', c) for c in stripped]]]
     uncommented = list(filter(None, uncommented))
     return uncommented
 
