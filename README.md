@@ -11,6 +11,11 @@ The purpose of BASIC Wrangler is to allow you to write BASIC programs using labe
 ## Requirements
 
 - Python 3 (any version of 3 should work, only tested with 3.7)
+- pyperclip
+
+```Batchfile
+pip install pyperclip
+```
 
 ## Usage
 
@@ -75,7 +80,7 @@ Your file will now be reformatted as `<file name>.dat`
 
 - [ ] Built-in conversion from numbered listings routine
 - [ ] A GUI
-- [ ] Output to clipboard when pasting
+- [x] Output to clipboard when pasting
 - [ ] Preprocessor macros like includes and ifs
 - [ ] Renaming variables
 - [ ] Support for external tokenizers by accounting for how many bytes each token uses

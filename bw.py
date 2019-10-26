@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ basic-wrangler - A BASIC program listing line renumberer/cruncher. """
 
+import pyperclip
 import json
 import logging
 import re
@@ -12,6 +13,7 @@ import basdefs
 
 # constants
 RE_QUOTES = r'(?=([^"]*"[^"]*")*[^"]*$)' # this selects things NOT inside quotes
+ALWAYS_FILE_FORMAT = ['bascom', 'amiga', 'riscos', 'gwbasic']
 
 def reformat_data_statements(input_file, basic_defs):
     """ Formats a newline-delimited list of values into DATA statements.
@@ -273,6 +275,12 @@ basic_line_length = None
 numbering = None
 increment = None
 
+# auto-set paste format when needed
+if basic_type.startswith('alt') or basic_type == 'trs80l1':
+    paste_format = True
+elif basic_type in ALWAYS_FILE_FORMAT or basic_type.startswith('zx'):
+    paste_format = False
+
 # open the input file
 with open(input_filename) as file:
     original_file = file.readlines()
@@ -365,9 +373,13 @@ newline_type = '\r\n'
 if basic_type in ['amiga', 'riscos']:
     newline_type = '\n'
 
-# write the renumbered file
-with open(output_filename, 'w', newline=newline_type) as file:
-    file.write(final_file)
+# write or paste the renumbered file
+if paste_format:
+    pyperclip.copy(final_file)
+else:
+    with open(output_filename, 'w', newline=newline_type) as file:
+        file.write(final_file)
 
 # output to console that the file has been saved
-print(input_filename + ' has been saved as ' + output_filename)
+if not paste_format:
+    print(input_filename + ' has been saved as ' + output_filename)
