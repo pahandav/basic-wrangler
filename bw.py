@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """ basic-wrangler - A BASIC program listing line renumberer/cruncher. """
 
-import pyperclip
+import argparse
 import json
 import logging
 import re
 import sys
 from collections import namedtuple
 from pathlib import Path
+
+import pyperclip
 
 import basdefs
 
@@ -265,15 +267,27 @@ def remove_comments(commented):
 # logger setup
 logging.basicConfig(filename='bw.log', filemode='w', level=logging.DEBUG)
 
+# set up argument parser
+parser = argparse.ArgumentParser()
+parser.add_argument('basic_type', choices=[b for b in [a for a in dir(basdefs) if not a.startswith('_')] if not b == 'prototype_def'], metavar='BASIC_Type', help='Specify the BASIC dialect to use')
+parser.add_argument('input_filename', metavar='filename', help='Specify the file to process')
+parser.add_argument('-p', '--paste-mode', dest='p', action='store_true', default=False, help='Sets paste to clipboard mode')
+parser.add_argument('-l', '--line-length', dest='l', type=int, help='Set a non-default maximum BASIC line length')
+parser.add_argument('-n', '--numbering_start', dest='n', type=int, help='Set the line number to begin numbering with')
+parser.add_argument('-i', '--increment', dest='i', type=int, help='Set the increment between BASIC lines')
+parser.add_argument('-o', '--output-filename', dest='o', help='Set the output filename')
+args = parser.parse_args()
+
 # get command line arguments
-basic_type = sys.argv[1]
-input_filename = sys.argv[2]
+basic_type = args.basic_type
+input_filename = args.input_filename
 
 # other arguments - hard-coded for now
-paste_format = True
-basic_line_length = None
-numbering = None
-increment = None
+paste_format = args.p
+basic_line_length = args.l
+numbering = args.n
+increment = args.i
+user_filename = args.o
 
 # auto-set paste format when needed
 if basic_type.startswith('alt') or basic_type == 'trs80l1':
@@ -357,16 +371,22 @@ elif paste_format and basic_defs.case == 'invert':
     final_file = final_file.swapcase()
 
 # set the final filename
-if basic_type == 'zx81':
-    output_filename = input_filename[0:-4] + '-out.b81'
-if basic_type == 'zxspectrum':
-    output_filename = input_filename[0:-4] + '-out.b82'
-if basic_type == 'amiga':
-    output_filename = input_filename[0:-4] + '.b'
-if basic_type == 'riscos':
-    output_filename = input_filename[0:-4] + ',ffb'
+if user_filename:
+    temp_filename = user_filename
 else:
-    output_filename = input_filename[0:-4] + '-out.bas'
+    temp_filename = input_filename
+if basic_type == 'zx81':
+    output_filename = temp_filename[0:-4] + '-out.b81'
+elif basic_type == 'zxspectrum':
+    output_filename = temp_filename[0:-4] + '-out.b82'
+elif basic_type == 'amiga':
+    output_filename = temp_filename[0:-4] + '.b'
+elif basic_type == 'riscos':
+    output_filename = temp_filename[0:-4] + ',ffb'
+elif not user_filename:
+    output_filename = temp_filename[0:-4] + '-out.bas'
+else:
+    output_filename = temp_filename
 
 # change the newline type if needed
 newline_type = '\r\n'
@@ -376,10 +396,10 @@ if basic_type in ['amiga', 'riscos']:
 # write or paste the renumbered file
 if paste_format:
     pyperclip.copy(final_file)
-else:
+if not paste_format or user_filename:
     with open(output_filename, 'w', newline=newline_type) as file:
         file.write(final_file)
 
 # output to console that the file has been saved
-if not paste_format:
+if not paste_format or user_filename:
     print(input_filename + ' has been saved as ' + output_filename)
