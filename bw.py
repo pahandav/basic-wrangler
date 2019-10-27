@@ -10,8 +10,13 @@ from collections import namedtuple
 from pathlib import Path
 
 import pyperclip
+from gooey import Gooey, GooeyParser
 
 import basdefs
+
+if len(sys.argv) >= 2:
+    if not '--ignore-gooey' in sys.argv:
+        sys.argv.append('--ignore-gooey')
 
 # constants
 RE_QUOTES = r'(?=([^"]*"[^"]*")*[^"]*$)' # this selects things NOT inside quotes
@@ -266,154 +271,158 @@ def remove_comments(commented):
     uncommented = list(filter(None, uncommented))
     return uncommented
 
-# logger setup
-logging.basicConfig(filename='bw.log', filemode='w', level=logging.DEBUG)
+@Gooey(program_name='BASIC Wrangler', default_size=(610, 650))
+def main():
+    """ The main function. """
+    # logger setup
+    logging.basicConfig(filename='bw.log', filemode='w', level=logging.DEBUG)
 
-# set up argument parser
-parser = argparse.ArgumentParser()
-parser.add_argument('basic_type', choices=[b for b in [a for a in dir(basdefs) if not a.startswith('_')] if not b == 'prototype_def'], metavar='BASIC_Type', help='Specify the BASIC dialect to use')
-parser.add_argument('input_filename', metavar='filename', help='Specify the file to process')
-parser.add_argument('-p', '--paste-mode', dest='p', action='store_true', default=False, help='Sets paste to clipboard mode')
-parser.add_argument('-l', '--line-length', dest='l', type=int, help='Set a non-default maximum BASIC line length')
-parser.add_argument('-n', '--numbering_start', dest='n', type=int, help='Set the line number to begin numbering with')
-parser.add_argument('-i', '--increment', dest='i', type=int, help='Set the increment between BASIC lines')
-parser.add_argument('-o', '--output-filename', dest='o', help='Set the output filename')
-args = parser.parse_args()
+    # set up argument parser and get arguments
+    parser = GooeyParser(description="A BASIC program listing line renumberer/cruncher.")
+    parser.add_argument('basic_type', choices=[b for b in [a for a in dir(basdefs) if not a.startswith('_')] if not b == 'prototype_def'], metavar='BASIC_Type', help='Specify the BASIC dialect to use')
+    parser.add_argument('input_filename', metavar='filename', help='Specify the file to process', widget='FileChooser')
+    parser.add_argument('-o', '--output-filename', dest='output_filename', help='Set the output filename', widget='FileSaver')
+    parser.add_argument('-p', '--paste-mode', dest='paste_mode', action='store_true', default=False, help='Sets paste to clipboard mode')
+    parser.add_argument('-l', '--line-length', dest='line_length', type=int, help='Set a non-default maximum BASIC line length')
+    parser.add_argument('-n', '--numbering_start', dest='numbering', type=int, help='Set the line number to begin numbering with')
+    parser.add_argument('-i', '--increment', dest='increment', type=int, help='Set the increment between BASIC lines')
+    args = parser.parse_args()
 
-# get command line arguments
-basic_type = args.basic_type
-input_filename = args.input_filename
+    # set variables from CLI or GUI arguments
+    basic_type = args.basic_type
+    input_filename = args.input_filename
+    paste_format = args.paste_mode
+    basic_line_length = args.line_length
+    numbering = args.numbering
+    increment = args.increment
+    user_filename = args.output_filename
 
-# other arguments - hard-coded for now
-paste_format = args.p
-basic_line_length = args.l
-numbering = args.n
-increment = args.i
-user_filename = args.o
+    # auto-set paste format when needed
+    if basic_type.startswith('alt') or basic_type == 'trs80l1':
+        paste_format = True
+    elif basic_type in ALWAYS_FILE_FORMAT or basic_type.startswith('zx'):
+        paste_format = False
 
-# auto-set paste format when needed
-if basic_type.startswith('alt') or basic_type == 'trs80l1':
-    paste_format = True
-elif basic_type in ALWAYS_FILE_FORMAT or basic_type.startswith('zx'):
-    paste_format = False
+    # open the input file
+    with open(input_filename) as file:
+        original_file = file.readlines()
 
-# open the input file
-with open(input_filename) as file:
-    original_file = file.readlines()
+    # set BASIC definition namedtuple
+    set_basic_type = getattr(basdefs, basic_type)
+    BasicDefs = namedtuple('BasicDefs', ['basic_line_length', 'combine', 'crunch', 'print_as_question', 'statement_joining_character', 'numbering', 'case', 'increment', 'abbreviate', 'tokenize', 'data_length'])
+    basic_defs = BasicDefs(*set_basic_type(paste_format, basic_line_length, numbering, increment))
+    logging.debug(basic_defs)
 
-# set BASIC definition namedtuple
-set_basic_type = getattr(basdefs, basic_type)
-BasicDefs = namedtuple('BasicDefs', ['basic_line_length', 'combine', 'crunch', 'print_as_question', 'statement_joining_character', 'numbering', 'case', 'increment', 'abbreviate', 'tokenize', 'data_length'])
-basic_defs = BasicDefs(*set_basic_type(paste_format, basic_line_length, numbering, increment))
-logging.debug(basic_defs)
+    # remove comments
+    working_file = remove_comments(original_file)
 
-# remove comments
-working_file = remove_comments(original_file)
+    # reformat DATA statements if needed
+    for line in working_file:
+        if line.startswith('#data'):
+            working_file = reformat_data_statements(working_file, basic_defs)
 
-# reformat DATA statements if needed
-for index, line in enumerate(working_file):
-    if line.startswith('#data'):
-        working_file = reformat_data_statements(working_file, basic_defs)
+    # create a dictionary containing all the jump target labels
+    label_dict, line_replacement = populate_label_data(working_file)
 
-# create a dictionary containing all the jump target labels
-label_dict, line_replacement = populate_label_data(working_file)
-
-# ZX Spectrum laziness feature - replace GOTO and GOSUB with GO TO and GO SUB
-if basic_type == 'zxspectrum':
-    for index, line in enumerate(working_file):
-        working_file[index] = re.sub('GOTO' + RE_QUOTES, 'GO TO', line)
-    for index, line in enumerate(working_file):
-        working_file[index] = re.sub('GOSUB' + RE_QUOTES, 'GO SUB', line)
-
-# abbreviate statements if needed
-if basic_defs.abbreviate:
-    script_dir = Path(__file__).resolve().parent
-    rel_path = (basic_type + '.abv')
-    abbrev_path = Path.joinpath(script_dir, rel_path)
-    with open(abbrev_path) as abbrev_file:
-        abbrev_dict = json.load(abbrev_file)
-    for key in sorted(abbrev_dict, key=len, reverse=True):
+    # ZX Spectrum laziness feature - replace GOTO and GOSUB with GO TO and GO SUB
+    if basic_type == 'zxspectrum':
         for index, line in enumerate(working_file):
-            working_file[index] = re.sub(key + RE_QUOTES, abbrev_dict[key], line)
+            working_file[index] = re.sub('GOTO' + RE_QUOTES, 'GO TO', line)
+        for index, line in enumerate(working_file):
+            working_file[index] = re.sub('GOSUB' + RE_QUOTES, 'GO SUB', line)
 
-# renumber the BASIC file
-working_file = renumber_basic_file(working_file, basic_defs, label_dict, line_replacement, basic_type)
-logging.debug(label_dict)
+    # abbreviate statements if needed
+    if basic_defs.abbreviate:
+        script_dir = Path(__file__).resolve().parent
+        rel_path = (basic_type + '.abv')
+        abbrev_path = Path.joinpath(script_dir, rel_path)
+        with open(abbrev_path) as abbrev_file:
+            abbrev_dict = json.load(abbrev_file)
+        for key in sorted(abbrev_dict, key=len, reverse=True):
+            for index, line in enumerate(working_file):
+                working_file[index] = re.sub(key + RE_QUOTES, abbrev_dict[key], line)
 
-# replace labels with line numbers
-for key in sorted(label_dict, key=len, reverse=True):
+    # renumber the BASIC file
+    working_file = renumber_basic_file(working_file, basic_defs, label_dict, line_replacement, basic_type)
+    logging.debug(label_dict)
+
+    # replace labels with line numbers
+    for key in sorted(label_dict, key=len, reverse=True):
+        for index, line in enumerate(working_file):
+            working_file[index] = re.sub(key + RE_QUOTES, str(label_dict[key]), line)
+
+    # warn if line is too long
     for index, line in enumerate(working_file):
-        working_file[index] = re.sub(key + RE_QUOTES, str(label_dict[key]), line)
+        if len(line) > basic_defs.basic_line_length:
+            line_number_match = re.search(r'^\d*', line)
+            line_number = line[line_number_match.span()[0]:line_number_match.span()[1]]
+            logging.warning('Line number %s may be too long.', line_number)
 
-# warn if line is too long
-for index, line in enumerate(working_file):
-    if len(line) > basic_defs.basic_line_length:
-        line_number_match = re.search(r'^\d*', line)
-        line_number = line[line_number_match.span()[0]:line_number_match.span()[1]]
-        logging.warning('Line number %s may be too long.', line_number)
+    # add space in between line number and rest of line for certain basic versions
+    if basic_type in ['bascom', 'amiga'] or basic_type.startswith('zx'):
+        for index, line in enumerate(working_file):
+            space_index = re.search(r'^\d*', line)
+            working_file[index] = line[0:space_index.span()[1]] + ' ' + line[space_index.span()[1]:]
 
-# add space in between line number and rest of line for certain basic versions
-if basic_type in ['bascom', 'amiga'] or basic_type.startswith('zx'):
-    for index, line in enumerate(working_file):
-        space_index = re.search(r'^\d*', line)
-        working_file[index] = line[0:space_index.span()[1]] + ' ' + line[space_index.span()[1]:]
-
-# add newlines back in to the file
-atascii_file = None
-if basic_type == 'atari' and not paste_format:
-    atascii_list = [a.encode() for a in working_file]
-    atascii_file = b'\x9b'.join(atascii_list)
-    atascii_file = atascii_file + b'\x9b'
-else:
-    final_file = '\n'.join(working_file)
-    final_file = final_file + '\n'
-
-# add a POKE statement to Atari pasted files to expand the display so more text can be pasted in
-if basic_type == 'atari' and paste_format:
-    final_file = 'POKE 82,0\n' + final_file
-
-# adjust case if needed when pasting
-if basic_type in CBM_BASIC:
-    final_file = final_file.lower()
-elif paste_format and basic_defs.case == 'lower':
-    final_file = final_file.lower()
-elif paste_format and basic_defs.case == 'invert':
-    final_file = final_file.swapcase()
-
-# set the final filename
-if user_filename:
-    temp_filename = user_filename
-else:
-    temp_filename = input_filename
-if basic_type == 'zx81':
-    output_filename = temp_filename[0:-4] + '-out.b81'
-elif basic_type == 'zxspectrum':
-    output_filename = temp_filename[0:-4] + '-out.b82'
-elif basic_type == 'amiga':
-    output_filename = temp_filename[0:-4] + '.b'
-elif basic_type == 'riscos':
-    output_filename = temp_filename[0:-4] + ',ffb'
-elif not user_filename:
-    output_filename = temp_filename[0:-4] + '-out.bas'
-else:
-    output_filename = temp_filename
-
-# change the newline type if needed
-newline_type = '\r\n'
-if basic_type in ['amiga', 'riscos']:
-    newline_type = '\n'
-
-# write or paste the renumbered file
-if paste_format:
-    pyperclip.copy(final_file)
-if not paste_format or user_filename:
-    if atascii_file:
-        with open(output_filename, 'wb') as file:
-            file.write(atascii_file)
+    # add newlines back in to the file
+    atascii_file = None
+    if basic_type == 'atari' and not paste_format: # special ATASCII routine
+        atascii_list = [a.encode() for a in working_file]
+        atascii_file = b'\x9b'.join(atascii_list)
+        atascii_file = atascii_file + b'\x9b'
     else:
-        with open(output_filename, 'w', newline=newline_type) as file:
-            file.write(final_file)
+        final_file = '\n'.join(working_file)
+        final_file = final_file + '\n'
 
-# output to console that the file has been saved
-if not paste_format or user_filename:
-    print(input_filename + ' has been saved as ' + output_filename)
+    # add a POKE statement to Atari pasted files to expand the display so more text can be pasted in
+    if basic_type == 'atari' and paste_format:
+        final_file = 'POKE 82,0\n' + final_file
+
+    # adjust case if needed when pasting
+    if basic_type in CBM_BASIC:
+        final_file = final_file.lower()
+    elif paste_format and basic_defs.case == 'lower':
+        final_file = final_file.lower()
+    elif paste_format and basic_defs.case == 'invert':
+        final_file = final_file.swapcase()
+
+    # set the final filename
+    if user_filename:
+        temp_filename = user_filename
+    else:
+        temp_filename = input_filename
+    if basic_type == 'zx81':
+        output_filename = temp_filename[0:-4] + '-out.b81'
+    elif basic_type == 'zxspectrum':
+        output_filename = temp_filename[0:-4] + '-out.b82'
+    elif basic_type == 'amiga':
+        output_filename = temp_filename[0:-4] + '.b'
+    elif basic_type == 'riscos':
+        output_filename = temp_filename[0:-4] + ',ffb'
+    elif not user_filename:
+        output_filename = temp_filename[0:-4] + '-out.bas'
+    else:
+        output_filename = temp_filename
+
+    # change the newline type if needed
+    newline_type = '\r\n'
+    if basic_type in ['amiga', 'riscos']:
+        newline_type = '\n'
+
+    # write or paste the renumbered file
+    if paste_format:
+        pyperclip.copy(final_file)
+    if not paste_format or user_filename:
+        if atascii_file:
+            with open(output_filename, 'wb') as file:
+                file.write(atascii_file)
+        else:
+            with open(output_filename, 'w', newline=newline_type) as file:
+                file.write(final_file)
+
+    # output to console that the file has been saved
+    if not paste_format or user_filename:
+        print(input_filename + ' has been saved as ' + output_filename)
+
+if __name__ == '__main__':
+    main()
