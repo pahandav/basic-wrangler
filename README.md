@@ -107,6 +107,13 @@ Your file will now be reformatted as `<file name>.dat`
 
 ## Changelog
 
+### 0.02.0 - 2019-10-27
+
+- File mode with more command line arguments
+- Paste mode now places output directly onto the clipboard so you can paste directly into emulators
+- A basic GUI has been added
+- Various minor fixes and refactoring
+
 ### 0.01.0 - 2019-10-24
 
 - Initial release
