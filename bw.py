@@ -60,7 +60,8 @@ def main():
 
     # open the input file
     with open(input_filename) as file:
-        original_file = file.readlines()
+        original_file = file.read()
+    split_file = original_file.splitlines()
 
     # set BASIC definition namedtuple
     set_basic_type = getattr(basdefs, basic_type)
@@ -69,7 +70,7 @@ def main():
     logging.debug(basic_defs)
 
     # remove comments
-    working_file = functions.remove_comments(original_file)
+    working_file = functions.remove_comments(split_file)
 
     # reformat DATA statements if needed
     for line in working_file:
