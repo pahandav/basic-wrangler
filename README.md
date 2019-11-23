@@ -59,7 +59,7 @@ The ZX81 and ZX Spectrum dialects are meant to be tokenized by the EightyOne emu
 - _Write one statement per line_ unless you're doing something complicated with IF statements. A statement is whatever you would write up until you hit a colon to seperate statements.
 - _Write with spaces where appropriate_. BASIC Wrangler will deal with the output spacing for you.
 - You should write all BASIC keywords in **upper-case**.
-- Labels **MUST** start with a letter or an \_ (underscore) character, QBasic style.
+- Labels **MUST** start with an \_ (underscore) character. I intend to eventually remove the requirement to start with an underscore, but that will have to wait until I've implemented a better lexer.
 - To indicate a jump target, you should have the label on its own with a colon afterwards on the line directly preceding the jump target.
 - For the ZX Spectrum, if you want to write more portable code, you should write GO TO and GO SUB as GOTO and GOSUB, as BASIC Wrangler will fix those for you.
 - If you want to see an example of what properly formatted code might look like check out [the Battle System Test I wrote](http://github.com/pahandav/battle-test).
