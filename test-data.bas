@@ -362,4 +362,6 @@ END
 5
 5
 255
+THIS IS A TEST
+"THIS IS A TEST"
 #enddata

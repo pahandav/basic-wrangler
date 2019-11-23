@@ -59,9 +59,7 @@ def check_new_line(line):
     if 'IF' in line: need_new_line = True
     if 'GOTO' in line: need_new_line = True
     if 'RETURN' in line: need_new_line = True
-    if 'DATA' in line: need_new_line = True
-    if 'D.' in line: need_new_line = True
-    if 'REM' in line: need_new_line = True
+    if line[0].startswith('DATA') or line[0].startswith('D.') or line[0].startswith('REM'): need_new_line = True
     return need_new_line
 
 def determine_line_length(line, basic_defs, line_replacement):
@@ -98,7 +96,7 @@ def tokenize_line(line):
 
     This splits a string on spaces, quotes, and commas to create a list of tokens.
     TODO: replace this with a better lexer at some point. """
-    temp1 = re.split(r'(\s|\".*?\"|,)', line)
+    temp1 = re.split(r'(REM.*$|DATA.*$|D\..*$|\s|\".*?\"|,)', line)
     temp2 = [x for x in temp1 if x.strip()]
     return temp2
 

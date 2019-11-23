@@ -22,6 +22,8 @@ def reformat_data_statements(input_file, basic_defs):
         data_statement_length = basic_defs.basic_line_length - 9
     elif basic_defs.data_length is not None:
         data_statement_length = basic_defs.data_length - 9
+    if basic_defs.crunch != 1:
+        data_statement_length += 1
     output_file = list()
     for index, line in enumerate(input_file):
         if line.startswith('#data'):
@@ -36,22 +38,26 @@ def reformat_data_statements(input_file, basic_defs):
     for index in range(start_data_block, end_data_block):
         data_block.append(input_file[index])
     logging.debug(data_block)
-    need_new_data_statement = True
-    data_statement = ''
+    if basic_defs.crunch == 1:
+        data_statement_start = 'DATA'
+    else:
+        data_statement_start = 'DATA '
+    #need_new_data_statement = False
+    data_statement = data_statement_start
     for index, line in enumerate(data_block):
-        if need_new_data_statement:
-            data_statement = 'DATA ' + line + ','
-            logging.debug(data_statement)
-            need_new_data_statement = False
-            continue
-        if len(data_statement) + len(line) > data_statement_length:
-            need_new_data_statement = True
-            data_statement = data_statement + line
+        combined_line_length = len(data_statement) + len(line)
+        #if need_new_data_statement:
+            #data_statement = 'DATA ' + line + ','
+            #logging.debug(data_statement)
+            #need_new_data_statement = False
+        if combined_line_length <= data_statement_length:
+            data_statement = data_statement + line + ','
+        elif combined_line_length > data_statement_length:
+            #need_new_data_statement = True
+            data_statement = data_statement.rstrip(',')
             output_file.append(data_statement)
+            data_statement = data_statement_start + line + ','
             logging.debug(data_statement)
-            data_statement = ''
-            continue
-        data_statement = data_statement + line + ','
         logging.debug(data_statement)
     data_statement = data_statement.rstrip(',')
     logging.debug(data_statement)

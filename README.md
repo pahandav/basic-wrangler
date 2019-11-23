@@ -82,8 +82,6 @@ Your file will now be known as `<file name>.lbn`
 
 ## DATA Statement Reformatter
 
-***This feature is currently kind of buggy, and so it may or may not work for you.***
-
 This will move all the DATA statements in your program to the end of the listing, and allow BASIC Wrangler to correctly format them for the line length in your desired BASIC dialect.
 
 ***Do not use this feature if your program RESTOREs to a particular line number.***
