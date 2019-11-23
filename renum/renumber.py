@@ -12,7 +12,7 @@ def populate_label_data(working_file):
     label_dict = dict()
     # add labels to dictionary
     for line in working_file:
-        if line.startswith('`'):
+        if line.startswith('_'):
             label_dict[line] = 0
             line_count += 1
             logging.debug(line)
@@ -116,7 +116,7 @@ def renumber_basic_file(input_file, basic_defs, label_dict, line_replacement, ba
     for line in input_file:
         logging.debug(persistent_buffer)
         # routine for jump targets
-        if line.startswith('`'):
+        if line.startswith('_'):
             if persistent_buffer != str(current_line_number):
                 label_dict[line] = current_line_number + basic_defs.increment
                 persistent_buffer = persistent_buffer.rstrip(basic_defs.statement_joining_character)

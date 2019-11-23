@@ -1,10 +1,13 @@
 """ This module processes the BASIC definitions. """
-from common.constants import RE_QUOTES
-import yaml
-import re
-from pathlib import Path
-from collections import namedtuple
 import logging
+import re
+from collections import namedtuple
+from pathlib import Path
+
+import yaml
+
+from common.constants import RE_QUOTES
+
 SCRIPT_DIR = Path(__file__).resolve().parent
 def abbreviate(working_file, basic_type):
     """ Returns the file with keywords abbreviated. """

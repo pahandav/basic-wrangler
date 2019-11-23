@@ -13,7 +13,6 @@ import pyperclip
 from gooey import Gooey, GooeyParser
 
 import common.functions as functions
-import defs.abbreviate as abbreviate
 import defs.basdefs as basdefs
 import renum.renumber as renumber
 # constants
