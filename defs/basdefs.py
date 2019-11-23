@@ -1,473 +1,58 @@
-""" This module contains BASIC dialect definitions for basicwrangler.
+""" This module processes the BASIC definitions. """
 
-    TODO: Replace this entire module of functions with YAML or JSON definitions. """
+import yaml
+from pathlib import Path
+from collections import namedtuple
+import logging
+SCRIPT_DIR = Path(__file__).resolve().parent
+def get_basic_dialects():
+    """ Returns a list of BASIC dialects from the basdefs.yaml file. """
+    yaml_path = Path.joinpath(SCRIPT_DIR, 'basdefs.yaml')
+    with open(yaml_path) as yaml_file:
+        yaml_dict = yaml.safe_load(yaml_file)
+    dialect_list = sorted([a for a in yaml_dict])
+    return dialect_list
 
-def prototype_def(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ A prototypical BASIC definition.
-
-    Modify according to the parameters of the desired version of BASIC. """
-
-    if basic_line_length is None and paste_format: basic_line_length = 72 # set maximum basic line length for paste mode
-    elif basic_line_length is None: basic_line_length = 128 # set maximum basic line length for file mode
-    combine = True # decide whether to combine lines or not
-    crunch = 0 # set the crunching level - 1 has no spaces, 0 has spaces - numbers above 1 reserved for future use
-    print_as_question = False # this decides whether to abbreviate PRINT as ?
-    statement_joining_character = ':' # this is the character that joins statements together - almost always ':'
-    if numbering is None: numbering = 0 # this is the line number to start numbering with
-    case = '' # determines whether to change case on output - should usually be blank
-    if increment is None: increment = 1 # this is the line numbering increment
-    abbreviate = False # this is to indicate the use of an abbreviation dictionary - should normally be False
-    tokenize = False # this is to indicate the use of a tokenizer
-    # data_length = 96 # this is for when a different data statement length is needed
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def alt4k(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Altair 8800 4K BASIC. """
-    if basic_line_length is None: basic_line_length = 72
-    combine = True
-    crunch = 1
-    print_as_question = False
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def alt8k(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Altair 8800 8K BASIC. """
-    if basic_line_length is None: basic_line_length = 72
-    combine = True
-    crunch = 1
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def altext(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Altair 8800 Extended BASIC. """
-    if basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 1
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def altdisk(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Altair 8800 Disk BASIC. """
-    if basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 1
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def cpm4(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ CP/M BASIC-80 version 4. """
-    if basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 1
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def cpm5(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ CP/M BASIC-80 version 5. """
-    if basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 0
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def bascom(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Microsoft BASCOM. """
-    if basic_line_length is None: basic_line_length = 252
-    combine = False
-    crunch = 0
-    print_as_question = False
-    statement_joining_character = ':'
-    if numbering is None: numbering = 1
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def pet(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Commodore PET BASIC. """
-    if basic_line_length is None and paste_format: basic_line_length = 79
-    elif basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 1
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = 'lower'
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = True
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def apple2(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Applesoft BASIC. """
-    if basic_line_length is None and paste_format: basic_line_length = 239
-    elif basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 1
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = True
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def trs80l1(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ TRS-80 Level 1 BASIC. """
-    if basic_line_length is None: basic_line_length = 70
-    combine = True
-    crunch = 1
-    print_as_question = False
-    statement_joining_character = ':'
-    if numbering is None: numbering = 1
-    case = 'lower'
-    if increment is None: increment = 1
-    abbreviate = True
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def trs80l2(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ TRS-80 Level 2 BASIC. """
-    if basic_line_length is None and paste_format: basic_line_length = 241
-    elif basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 1
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = 'invert'
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def trs80m4(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ TRS-80 Model 4 BASIC. """
-    if basic_line_length is None and paste_format: basic_line_length = 241
-    elif basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 0
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def atari(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Atari 8-bit BASIC. """
-    if basic_line_length is None and paste_format: basic_line_length = 119
-    elif basic_line_length is None: basic_line_length = 128
-    combine = True
-    crunch = 0
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = True
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def ti99(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ TI 99/4A BASIC. """
-    if basic_line_length is None and paste_format: basic_line_length = 140
-    elif basic_line_length is None: basic_line_length = 252
-    combine = False
-    crunch = 0
-    print_as_question = False
-    statement_joining_character = '::'
-    if numbering is None: numbering = 1
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = True
-    data_length = 96
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def ti99xb(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ TI 99/4A Extended BASIC. """
-    if basic_line_length is None and paste_format: basic_line_length = 140
-    elif basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 0
-    print_as_question = False
-    statement_joining_character = '::'
-    if numbering is None: numbering = 1
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = True
-    data_length = 96
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def vic20(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Commodore VIC-20 BASIC. """
-    if basic_line_length is None and paste_format: basic_line_length = 87
-    elif basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 1
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = 'lower'
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = True
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def coco(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Tandy Color BASIC. """
-    if basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 0
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = True
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def apple3(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Apple /// Business BASIC. """
-    if basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 0
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def c64(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Commodore 64 BASIC. """
-    if basic_line_length is None and paste_format: basic_line_length = 80
-    elif basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 1
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = 'lower'
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = True
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def plus4(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Commodore PLUS/4 BASIC. """
-    if basic_line_length is None and paste_format: basic_line_length = 80
-    elif basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 1
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = 'lower'
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = True
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def c128(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Commodore 128 BASIC. """
-    if basic_line_length is None and paste_format: basic_line_length = 80
-    elif basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 1
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = 'lower'
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = True
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def zx81(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Sinclair ZX-81 BASIC. """
-    basic_line_length = 65535
-    combine = False
-    crunch = 0
-    print_as_question = False
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def zxspectrum(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Sinclair ZX Spectrum BASIC. """
-    basic_line_length = 65535
-    combine = True
-    crunch = 0
-    print_as_question = False
-    statement_joining_character = ' : '
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def bbc(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ BBC Micro BASIC. """
-    if basic_line_length is None and paste_format: basic_line_length = 239
-    elif basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 0
-    print_as_question = False
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def oric(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Tangerine Oric BASIC. """
-    if basic_line_length is None and paste_format: basic_line_length = 78
-    elif basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 1
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = True
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def msx(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ MSX BASIC. """
-    if basic_line_length is None and paste_format: basic_line_length = 239
-    elif basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 1
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def adam(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Coleco ADAM SmartBASIC. """
-    if basic_line_length is None and paste_format: basic_line_length = 100
-    elif basic_line_length is None: basic_line_length = 128
-    combine = True
-    crunch = 0
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def cpc(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Amstrad CPC BASIC. """
-    if basic_line_length is None: basic_line_length = 186
-    combine = True
-    crunch = 0
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 1
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def amiga(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Commodore Amiga ACE BASIC Compiler. """
-    if basic_line_length is None: basic_line_length = 252
-    combine = False
-    crunch = 0
-    print_as_question = False
-    statement_joining_character = ':'
-    if numbering is None: numbering = 1
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def riscos(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ BBC RISC OS BASIC. """
-    if basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 0
-    print_as_question = False
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
-
-def gwbasic(paste_format, basic_line_length, numbering, increment, data_length=None):
-    """ Microsoft GW-BASIC. """
-    if basic_line_length is None: basic_line_length = 252
-    combine = True
-    crunch = 0
-    print_as_question = True
-    statement_joining_character = ':'
-    if numbering is None: numbering = 0
-    case = ''
-    if increment is None: increment = 1
-    abbreviate = False
-    tokenize = False
-    return (basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
+def set_basic_defs(basic_type, paste_format, basic_line_length, numbering, increment):
+    """ Return a namedtuple containing the BASIC definitions. """
+    BasicDefs = namedtuple('BasicDefs', ['basic_type', 'basic_line_length', 'combine', 'crunch', 'print_as_question', 'statement_joining_character', 'numbering', 'case', 'increment', 'abbreviate', 'tokenize', 'data_length'])
+    yaml_path = Path.joinpath(SCRIPT_DIR, 'basdefs.yaml')
+    with open(yaml_path) as yaml_file:
+        yaml_dict = yaml.safe_load(yaml_file)
+    def_dict = yaml_dict[basic_type]
+    if 'paste_line_length' not in def_dict:
+        paste_format = False
+    elif 'file_line_length' not in def_dict:
+        paste_format = True
+    if basic_line_length is None:
+        if paste_format:
+            basic_line_length = def_dict['paste_line_length']
+        elif not paste_format:
+            basic_line_length = def_dict['file_line_length']
+    combine = def_dict['combine']
+    crunch = def_dict['crunch']
+    print_as_question = def_dict['print_as_question']
+    if 'statement_joining_character' in def_dict:
+        statement_joining_character = def_dict['statement_joining_character']
+    else:
+        statement_joining_character = ':'
+    if numbering is None:
+        numbering = def_dict['numbering']
+    if 'case' in def_dict:
+        case = def_dict['case']
+    else:
+        case = ''
+    if increment is None:
+        if 'increment' in def_dict:
+            increment = def_dict['increment']
+        else:
+            increment = 1
+    abbreviate = def_dict['abbreviate']
+    tokenize = def_dict['tokenize']
+    if 'data_length' in def_dict:
+        data_length = def_dict['data_length']
+    else:
+        data_length = None
+    basic_defs = BasicDefs(basic_type, basic_line_length, combine, crunch, print_as_question, statement_joining_character, numbering, case, increment, abbreviate, tokenize, data_length)
+    logging.debug(basic_defs)
+    return basic_defs, paste_format

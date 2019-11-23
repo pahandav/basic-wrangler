@@ -34,7 +34,7 @@ def main():
 
     # set up argument parser and get arguments
     parser = GooeyParser(description="A BASIC program listing line renumberer/cruncher.")
-    parser.add_argument('basic_type', choices=[b for b in [a for a in dir(basdefs) if not a.startswith('_')] if not b == 'prototype_def'], metavar='BASIC_Type', help='Specify the BASIC dialect to use')
+    parser.add_argument('basic_type', choices=basdefs.get_basic_dialects(), metavar='BASIC_Type', help='Specify the BASIC dialect to use')
     parser.add_argument('input_filename', metavar='filename', help='Specify the file to process', widget='FileChooser')
     parser.add_argument('-o', '--output-filename', dest='output_filename', help='Set the output filename', widget='FileSaver')
     parser.add_argument('-p', '--paste-mode', dest='paste_mode', action='store_true', default=False, help='Sets paste to clipboard mode')
@@ -52,22 +52,14 @@ def main():
     increment = args.increment
     user_filename = args.output_filename
 
-    # auto-set paste format when needed
-    if basic_type.startswith('alt') or basic_type == 'trs80l1':
-        paste_format = True
-    elif basic_type in ALWAYS_FILE_FORMAT or basic_type.startswith('zx'):
-        paste_format = False
 
     # open the input file
     with open(input_filename) as file:
         original_file = file.read()
     split_file = original_file.splitlines()
 
-    # set BASIC definition namedtuple
-    set_basic_type = getattr(basdefs, basic_type)
-    BasicDefs = namedtuple('BasicDefs', ['basic_line_length', 'combine', 'crunch', 'print_as_question', 'statement_joining_character', 'numbering', 'case', 'increment', 'abbreviate', 'tokenize', 'data_length'])
-    basic_defs = BasicDefs(*set_basic_type(paste_format, basic_line_length, numbering, increment))
-    logging.debug(basic_defs)
+    # get BASIC definition namedtuple
+    basic_defs, paste_format = basdefs.set_basic_defs(basic_type, paste_format, basic_line_length, numbering, increment)
 
     # remove comments
     working_file = functions.remove_comments(split_file)
