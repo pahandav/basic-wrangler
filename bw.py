@@ -13,6 +13,7 @@ import pyperclip
 from gooey import Gooey, GooeyParser
 
 import common.functions as functions
+import convert.helpers as helpers
 import defs.basdefs as basdefs
 import renum.renumber as renumber
 # constants
@@ -25,23 +26,8 @@ if len(sys.argv) >= 2:
 ALWAYS_FILE_FORMAT = ['bascom', 'amiga', 'riscos', 'gwbasic']
 CBM_BASIC = ['pet', 'vic20', 'c64', 'plus4', 'c128']
 
-@Gooey(program_name='BASIC Wrangler', default_size=(610, 650))
-def main():
-    """ The main function. """
-    # logger setup
-    logging.basicConfig(filename='bw.log', filemode='w', level=logging.DEBUG)
-
-    # set up argument parser and get arguments
-    parser = GooeyParser(description="A BASIC program listing line renumberer/cruncher.")
-    parser.add_argument('basic_type', choices=basdefs.get_basic_dialects(), metavar='BASIC_Type', help='Specify the BASIC dialect to use')
-    parser.add_argument('input_filename', metavar='filename', help='Specify the file to process', widget='FileChooser')
-    parser.add_argument('-o', '--output-filename', dest='output_filename', help='Set the output filename', widget='FileSaver')
-    parser.add_argument('-p', '--paste-mode', dest='paste_mode', action='store_true', default=False, help='Sets paste to clipboard mode')
-    parser.add_argument('-l', '--line-length', dest='line_length', type=int, help='Set a non-default maximum BASIC line length')
-    parser.add_argument('-n', '--numbering_start', dest='numbering', type=int, help='Set the line number to begin numbering with')
-    parser.add_argument('-i', '--increment', dest='increment', type=int, help='Set the increment between BASIC lines')
-    args = parser.parse_args()
-
+def renum(args):
+    """ Renumbers BASIC listings. """
     # set variables from CLI or GUI arguments
     basic_type = args.basic_type
     input_filename = args.input_filename
@@ -60,8 +46,9 @@ def main():
     # get BASIC definition namedtuple
     basic_defs, paste_format = basdefs.set_basic_defs(basic_type, paste_format, basic_line_length, numbering, increment)
 
-    # remove comments
-    working_file = functions.remove_comments(split_file)
+    # strip and remove comments
+    working_file = functions.strip_file(split_file)
+    working_file = functions.remove_comments(working_file)
 
     # reformat DATA statements if needed
     for line in working_file:
@@ -150,6 +137,62 @@ def main():
     # output to console that the file has been saved
     if not paste_format or user_filename:
         print(input_filename + ' has been saved as ' + output_filename)
+
+def convert(args):
+    """ Converts between listing formats. """
+    input_filename = args.input_filename
+    user_filename = args.output_filename
+    with open(input_filename) as file:
+        original_file = file.read()
+    split_file = original_file.splitlines()
+    working_file = functions.strip_file(split_file)
+    if args.c64_list:
+        working_file = helpers.c64_list(working_file)
+    if args.data_formatter:
+        working_file = helpers.data_format(working_file)
+    final_file = '\n'.join(working_file)
+    final_file = final_file + '\n'
+    if user_filename:
+        temp_filename = user_filename
+    else:
+        temp_filename = input_filename
+    if not user_filename:
+        output_filename = temp_filename[0:-4] + '-out.bas'
+    else:
+        output_filename = temp_filename
+    with open(output_filename, 'w') as file:
+        file.write(final_file)
+    print(input_filename + ' has been saved as ' + output_filename)
+
+
+@Gooey(program_name='BASIC Wrangler', default_size=(610, 650))
+def main():
+    """ The main function. """
+    # logger setup
+    logging.basicConfig(filename='bw.log', filemode='w', level=logging.DEBUG)
+
+    # set up argument parser and get arguments
+    parser = GooeyParser(description="A BASIC program listing line renumberer/cruncher.")
+    subparsers = parser.add_subparsers(help='sub-command help')
+    # renumber subparser
+    parser_renum = subparsers.add_parser('renum', help='renum help')
+    parser_renum.add_argument('basic_type', choices=basdefs.get_basic_dialects(), metavar='BASIC_Type', help='Specify the BASIC dialect to use')
+    parser_renum.add_argument('input_filename', metavar='filename', help='Specify the file to process', widget='FileChooser')
+    parser_renum.add_argument('-o', '--output-filename', dest='output_filename', help='Set the output filename', widget='FileSaver')
+    parser_renum.add_argument('-p', '--paste-mode', dest='paste_mode', action='store_true', default=False, help='Sets paste to clipboard mode')
+    parser_renum.add_argument('-l', '--line-length', dest='line_length', type=int, help='Set a non-default maximum BASIC line length')
+    parser_renum.add_argument('-n', '--numbering_start', dest='numbering', type=int, help='Set the line number to begin numbering with')
+    parser_renum.add_argument('-i', '--increment', dest='increment', type=int, help='Set the increment between BASIC lines')
+    parser_renum.set_defaults(func=renum)
+    # convert subparser
+    parser_convert = subparsers.add_parser('convert', help='convert help')
+    parser_convert.add_argument('input_filename', metavar='filename', help='Specify the file to process', widget='FileChooser')
+    parser_convert.add_argument('-c', '--c64-list', action='store_true', default=False, help='Convert from C64List format')
+    parser_convert.add_argument('-d', '--data-formatter', action='store_true', default=False, help='Reformat DATA Statments')
+    parser_convert.add_argument('-o', '--output-filename', dest='output_filename', help='Set the output filename', widget='FileSaver')
+    parser_convert.set_defaults(func=convert)
+    args = parser.parse_args()
+    args.func(args)
 
 if __name__ == '__main__':
     main()

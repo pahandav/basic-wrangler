@@ -75,7 +75,7 @@ C64List <file name> -lbl
 Then type:
 
 ```Batchfile
-fix-output <file name>.lbl
+bw convert <file name>.lbl -c
 ```
 
 Your file will now be known as `<file name>.lbn`
@@ -86,10 +86,10 @@ This will move all the DATA statements in your program to the end of the listing
 
 ***Do not use this feature if your program RESTOREs to a particular line number.***
 
-To use, type:
+To use, type: (if you add -d to the prior command, it will also convert the data statements)
 
 ```Batchfile
-data-format <file name>
+bw convert <file name> -d
 ```
 
 Your file will now be reformatted as `<file name>.dat`

@@ -5,12 +5,16 @@ import re
 from common.constants import RE_QUOTES
 
 
+def strip_file(unstripped):
+    """ Strip newlines and whitespace. """
+    # strip whitespace
+    stripped = [line.strip() for line in unstripped]
+    return stripped
+
 def remove_comments(commented):
     """ This will remove comments from the file. """
-    # strip whitespace
-    stripped = [line.strip() for line in commented]
     # strip comments
-    uncommented = [a.rstrip(':') for a in [b.rstrip() for b in [re.sub(RE_QUOTES + r"'.*?$", '', c) for c in stripped]]]
+    uncommented = [a.rstrip(':') for a in [b.rstrip() for b in [re.sub(RE_QUOTES + r"'.*?$", '', c) for c in commented]]]
     uncommented = list(filter(None, uncommented))
     return uncommented
 
