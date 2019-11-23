@@ -1,10 +1,22 @@
 """ This module processes the BASIC definitions. """
-
+from common.constants import RE_QUOTES
 import yaml
+import re
 from pathlib import Path
 from collections import namedtuple
 import logging
 SCRIPT_DIR = Path(__file__).resolve().parent
+def abbreviate(working_file, basic_type):
+    """ Returns the file with keywords abbreviated. """
+    yaml_path = Path.joinpath(SCRIPT_DIR, 'abbrevs.yaml')
+    with open(yaml_path) as yaml_file:
+        yaml_dict = yaml.safe_load(yaml_file)
+    abbrev_dict = yaml_dict[basic_type]
+    for key in sorted(abbrev_dict, key=len, reverse=True):
+        for index, line in enumerate(working_file):
+            working_file[index] = re.sub(key + RE_QUOTES, abbrev_dict[key], line)
+    return working_file
+
 def get_basic_dialects():
     """ Returns a list of BASIC dialects from the basdefs.yaml file. """
     yaml_path = Path.joinpath(SCRIPT_DIR, 'basdefs.yaml')

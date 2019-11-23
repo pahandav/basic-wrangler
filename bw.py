@@ -81,7 +81,7 @@ def main():
 
     # abbreviate statements if needed
     if basic_defs.abbreviate:
-        working_file = abbreviate.abbreviate(working_file, basic_type)
+        working_file = basdefs.abbreviate(working_file, basic_type)
 
     # renumber the BASIC file
     working_file = renumber.renumber_basic_file(working_file, basic_defs, label_dict, line_replacement, basic_type)
