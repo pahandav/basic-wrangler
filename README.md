@@ -28,7 +28,7 @@ pip install pyperclip Gooey PyYAML duallog
 bw <BASIC Type> <filename>
 ```
 
-When run without arguments, it will bring up the GUI. To see the help for the command line mode type `bw -h`.
+When run as `bwgui`, it will bring up the GUI.
 
 The BASIC Type is the dialect of BASIC that you wish to use. You can find all the current definitions in [`basdefs.py`](basdefs.py).
 

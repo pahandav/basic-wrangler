@@ -27,7 +27,6 @@ def data_format(input_file):
             temp = stripped + '\n'
             temp = re.sub(',' + RE_QUOTES, '\n', temp)
             temp = temp.lstrip()
-            print(temp)
             data_statement = data_statement + temp
             input_file[index] = ''
     data_statement = data_statement + '#enddata'
