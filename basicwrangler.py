@@ -166,7 +166,7 @@ def convert(args):
     print(input_filename + ' has been saved as ' + output_filename)
 
 
-@Gooey(program_name='BASIC Wrangler', default_size=(610, 650))
+@Gooey(program_name='BASIC Wrangler', default_size=(610, 675), navigation='TABBED')
 def main():
     """ The main function. """
     duallog.setup('logs')

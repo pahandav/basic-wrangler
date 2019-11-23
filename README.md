@@ -1,8 +1,8 @@
-# basic-wrangler
+# BASIC Wrangler
 
-A BASIC program listing line renumberer/cruncher.
+A BASIC program listing line renumberer/cruncher (aka, a minifier).
 
-***This program is currently in alpha testing.*** It will probably break your program. The documentation is minimal. Things will change frequently.
+**_This program is currently in alpha testing._** It will probably break your program. The documentation is minimal. Things will change frequently.
 
 ## Purpose
 
@@ -30,7 +30,7 @@ bw <BASIC Type> <filename>
 
 When run as `bwgui`, it will bring up the GUI.
 
-The BASIC Type is the dialect of BASIC that you wish to use. You can find all the current definitions in [`basdefs.py`](basdefs.py).
+The BASIC Type is the dialect of BASIC that you wish to use. You can find all the current definitions in [`basdefs.yaml`](defs\basdefs.yaml).
 
 When not in paste mode, it will output to `<filename-out>.bas` unless you specify an output file name with `-o`. You can then either transfer the file into a disk image or you can paste the code into an emulator if you used the paste mode.
 
@@ -56,11 +56,11 @@ The ZX81 and ZX Spectrum dialects are meant to be tokenized by the EightyOne emu
 
 ## Writing Programs for BASIC Wrangler
 
-- *Write one statement per line* unless you're doing something complicated with IF statements. A statement is whatever you would write up until you hit a colon to seperate statements.
-- *Write with spaces where appropriate*. BASIC Wrangler will deal with the output spacing for you.
+- _Write one statement per line_ unless you're doing something complicated with IF statements. A statement is whatever you would write up until you hit a colon to seperate statements.
+- _Write with spaces where appropriate_. BASIC Wrangler will deal with the output spacing for you.
 - You should write all BASIC keywords in **upper-case**.
-- Labels **MUST** start with a letter or an _ (underscore) character, QBasic style. You must add a colon after the jump target label.
-- To indicate a jump target, you should have the label on its own on the line directly preceding the jump target.
+- Labels **MUST** start with a letter or an \_ (underscore) character, QBasic style.
+- To indicate a jump target, you should have the label on its own with a colon afterwards on the line directly preceding the jump target.
 - For the ZX Spectrum, if you want to write more portable code, you should write GO TO and GO SUB as GOTO and GOSUB, as BASIC Wrangler will fix those for you.
 - If you want to see an example of what properly formatted code might look like check out [the Battle System Test I wrote](http://github.com/pahandav/battle-test).
 
@@ -83,14 +83,22 @@ Your file will now be known as `<file name>.lbn`
 
 ## DATA Statement Reformatter
 
+**_I'm pretty sure this'll work, but it still might not work._**
+
 This will move all the DATA statements in your program to the end of the listing, and allow BASIC Wrangler to correctly format them for the line length in your desired BASIC dialect.
 
-***Do not use this feature if your program RESTOREs to a particular line number.***
+**_Do not use this feature if your program RESTOREs to a particular line number._**
 
 To use, type: (if you add -d to the prior command, it will also convert the data statements)
 
 ```Batchfile
 bw convert <file name> -d
+```
+
+To use both in order:
+
+```Batchfile
+bw convert <file name> -c -d
 ```
 
 Your file will now be reformatted as `<file name>.dat`
@@ -106,6 +114,15 @@ Your file will now be reformatted as `<file name>.dat`
 - [x] Support for output to files that can be transferred directly into disk images
 
 ## Changelog
+
+### 0.03.0 - 2019-11-22
+
+- Changed the BASIC definition and abbreviation routines to use YAML for the definitions.
+- Changed to QBasic-style labeling.
+- Fixed the DATA statement reformatter.
+- Integrated helper scripts into main program with subcommands.
+- Changed logging routine to output debug logs with duallog.
+- Added seperate entry point scripts.
 
 ### 0.02.0 - 2019-10-27
 
