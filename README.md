@@ -14,11 +14,12 @@ The purpose of BASIC Wrangler is to allow you to write BASIC programs using labe
 - pyperclip
 - Gooey
 - PyYAML
+- duallog
 
 You should run this before the first time you run the program:
 
 ```Batchfile
-pip install pyperclip Gooey PyYAML
+pip install pyperclip Gooey PyYAML duallog
 ```
 
 ## Usage

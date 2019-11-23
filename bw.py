@@ -6,6 +6,7 @@ import json
 import logging
 import re
 import sys
+import duallog
 from collections import namedtuple
 from pathlib import Path
 
@@ -168,8 +169,9 @@ def convert(args):
 @Gooey(program_name='BASIC Wrangler', default_size=(610, 650))
 def main():
     """ The main function. """
+    duallog.setup('logs')
     # logger setup
-    logging.basicConfig(filename='bw.log', filemode='w', level=logging.DEBUG)
+    #logging.basicConfig(filename='bw.log', filemode='w', level=logging.DEBUG)
 
     # set up argument parser and get arguments
     parser = GooeyParser(description="A BASIC program listing line renumberer/cruncher.")
