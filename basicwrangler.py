@@ -17,6 +17,7 @@ import common.functions as functions
 import convert.helpers as helpers
 import defs.basdefs as basdefs
 import renum.renumber as renumber
+import convert.label as label
 # constants
 from common.constants import RE_QUOTES
 
@@ -147,6 +148,8 @@ def convert(args):
         original_file = file.read()
     split_file = original_file.splitlines()
     working_file = functions.strip_file(split_file)
+    if args.label:
+        label.label_listing(working_file)
     if args.c64_list:
         working_file = helpers.c64_list(working_file)
     if args.data_formatter:
@@ -187,8 +190,10 @@ def main():
     parser_renum.add_argument('-i', '--increment', dest='increment', type=int, help='Set the increment between BASIC lines')
     parser_renum.set_defaults(func=renum)
     # convert subparser
+    # TODO: Add a mutually exclusive group here.
     parser_convert = subparsers.add_parser('convert', help='convert help')
     parser_convert.add_argument('input_filename', metavar='filename', help='Specify the file to process', widget='FileChooser')
+    parser_convert.add_argument('-l', '--label', action='store_true', default=False, help='Convert from numbered listing')
     parser_convert.add_argument('-c', '--c64-list', action='store_true', default=False, help='Convert from C64List format')
     parser_convert.add_argument('-d', '--data-formatter', action='store_true', default=False, help='Reformat DATA Statments')
     parser_convert.add_argument('-o', '--output-filename', dest='output_filename', help='Set the output filename', widget='FileSaver')
