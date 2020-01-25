@@ -1,10 +1,11 @@
 """ This script contains the routines to convert a numbered listing to a labelled listing. """
 
 from lex.genlex import generate_label_lexer
+from lex.lexer import LexerError
 import sys
 import logging
 
-def tokenize_line(Lexer, untokenized_line):
+def tokenize_line(Lexer, untokenized_line, line_no):
     """ This function returns a tokenized line as a list. """
     Lexer.input(untokenized_line)
     token_list = list()
@@ -13,14 +14,14 @@ def tokenize_line(Lexer, untokenized_line):
             logging.debug(tok)
             token_list.append(tok)
     except LexerError as err:
-        print('LexerError at position %s' % err.pos)
+        print('LexerError at position %s in line number %s' % (err.pos, line_no+1))
     return token_list
 
 def sanity_check_listing(Lexer, numbered_file):
     """ First pass - This function returns a list of all the line numbers in the file. """
     original_line_numbers = list()
-    for line in numbered_file:
-        tokenized_line = tokenize_line(Lexer, line)
+    for line_no, line in enumerate(numbered_file):
+        tokenized_line = tokenize_line(Lexer, line, line_no)
         if tokenized_line[0].type == 'LINE':
             if len(original_line_numbers) == 0:
                 original_line_numbers.append(tokenized_line[0].val)
@@ -38,13 +39,30 @@ def sanity_check_listing(Lexer, numbered_file):
 def extract_jump_targets(Lexer, numbered_file, original_line_numbers):
     """ Second pass - This function returns a set of jump targets. """
     jump_targets = set()
-    for line in numbered_file:
-        tokenized_line = tokenize_line(Lexer, line)
+    for line_no, line in enumerate(numbered_file):
+        handled = list()
+        tokenized_line = tokenize_line(Lexer, line, line_no)
         tokenized_line_length = len(tokenized_line)
         indices = [i for i, x in enumerate(tokenized_line) if x.type == "FLOW"]
         logging.debug(line)
         logging.debug(indices)
         for index in indices:
+            if index in handled:
+                continue
+            if tokenized_line[index].val == 'ON':
+                if tokenized_line[index+1].type == 'ID' and tokenized_line[index+2].type == 'FLOW':
+                    on_start_index = index + 2
+                    handled.append(on_start_index)
+                    for i in range(on_start_index+1, tokenized_line_length):
+                        if tokenized_line[i].type == 'NUMBER':
+                            target = tokenized_line[i].val
+                            logging.debug(target)
+                            if target not in original_line_numbers:
+                                logging.critical('Fatal Error! Attempt to jump to line number ' + target + ' is invalid!')
+                                sys.exit(1)
+                            jump_targets.add(target)
+                        elif tokenized_line[i].val == ',':
+                            continue
             if index+1 < tokenized_line_length:
                 if tokenized_line[index+1].type == 'NUMBER':
                     target = tokenized_line[index+1].val
@@ -59,9 +77,10 @@ def extract_jump_targets(Lexer, numbered_file, original_line_numbers):
 def output_basic_listing(Lexer, numbered_file, jump_targets):
     """ Final pass - This function returns the labelled BASIC file. """
     labeled_file = ''
-    for line in numbered_file:
+    for line_no, line in enumerate(numbered_file):
         set_flow = False
-        tokenized_line = tokenize_line(Lexer, line)
+        set_on = False
+        tokenized_line = tokenize_line(Lexer, line, line_no)
         tokenized_line_length = len(tokenized_line)
         for index, token in enumerate(tokenized_line):
             current_value = ''
@@ -71,9 +90,14 @@ def output_basic_listing(Lexer, numbered_file, jump_targets):
                     continue
                 else:
                     continue
-            if set_flow:
+            if set_on and token.type == 'NUMBER':
+                current_value = '_' + token.val
+            elif set_flow and not set_on:
                 current_value = '_' + token.val
                 set_flow = False
+            elif token.type == 'FLOW' and token.val == 'ON' and index+1 < tokenized_line_length and tokenized_line[index+1].type == 'ID':
+                set_on = True
+                current_value = token.val
             elif token.type == 'FLOW' and index+1 < tokenized_line_length and tokenized_line[index+1].type == 'NUMBER':
                 set_flow = True
                 current_value = token.val

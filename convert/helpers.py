@@ -22,6 +22,7 @@ def data_format(input_file):
     data_statement = '#data\n'
     for index, line in enumerate(input_file):
         if line.startswith('DATA'):
+            old_index = index
             stripped = line.lstrip('DATA')
             # This replaces every comma in between data statement values not in quotes with a newline
             temp = stripped + '\n'
@@ -30,6 +31,7 @@ def data_format(input_file):
             data_statement = data_statement + temp
             input_file[index] = ''
     data_statement = data_statement + '#enddata'
-    final = list(filter(None, input_file))
+    final = input_file[0:old_index]
+    #final = list(filter(None, input_file))
     final.append(data_statement)
     return final
