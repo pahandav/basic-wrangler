@@ -149,7 +149,7 @@ def convert(args):
     split_file = original_file.splitlines()
     working_file = functions.strip_file(split_file)
     if args.label:
-        label.label_listing(working_file)
+        working_file = label.label_listing(working_file)
     if args.c64_list:
         working_file = helpers.c64_list(working_file)
     if args.data_formatter:

@@ -56,10 +56,44 @@ def extract_jump_targets(Lexer, numbered_file, original_line_numbers):
     logging.debug(jump_targets)
     return jump_targets
 
+def output_basic_listing(Lexer, numbered_file, jump_targets):
+    """ Final pass - This function returns the labelled BASIC file. """
+    labeled_file = ''
+    for line in numbered_file:
+        set_flow = False
+        tokenized_line = tokenize_line(Lexer, line)
+        tokenized_line_length = len(tokenized_line)
+        for index, token in enumerate(tokenized_line):
+            current_value = ''
+            if token.type == 'LINE':
+                if token.val in jump_targets:
+                    labeled_file = labeled_file + '\n' + '_' + token.val + ':' + '\n'
+                    continue
+                else:
+                    continue
+            if set_flow:
+                current_value = '_' + token.val
+                set_flow = False
+            elif token.type == 'FLOW' and index+1 < tokenized_line_length and tokenized_line[index+1].type == 'NUMBER':
+                set_flow = True
+                current_value = token.val
+            elif token.type == 'COMMENT':
+                current_value = "'" + token.val[3:]
+            else:
+                current_value = token.val
+            labeled_file = labeled_file + current_value
+            if index+1 < tokenized_line_length:
+                if not token.type == 'PUNCTUATION' and not tokenized_line[index+1].type == 'PUNCTUATION':
+                    labeled_file = labeled_file + ' '
+        labeled_file = labeled_file + '\n'
+    return labeled_file
+
 def label_listing(numbered_file):
     """ This function returns a labeled BASIC listing. """
     basic_type = 'generic'
     Lexer = generate_label_lexer(basic_type)
     original_line_numbers = sanity_check_listing(Lexer, numbered_file)
     jump_targets = extract_jump_targets(Lexer, numbered_file, original_line_numbers)
-    sys.exit()
+    labeled_list = output_basic_listing(Lexer, numbered_file, jump_targets)
+    labeled_file = labeled_list.splitlines()
+    return labeled_file
