@@ -147,8 +147,24 @@ def convert(args):
     user_filename = args.output_filename
     with open(input_filename) as file:
         original_file = file.read()
+    if args.level1:
+        original_file = original_file.upper()
     split_file = original_file.splitlines()
     working_file = functions.strip_file(split_file)
+    basic_type = 'generic'
+    if args.level1:
+        basic_type = 'trs80l1'
+        working_file = basdefs.abbreviate(working_file, basic_type, True)
+    if args.atari:
+        basic_type = 'atari'
+        working_file = basdefs.abbreviate(working_file, basic_type, True)
+    if args.ti99xb:
+        basic_type = 'ti99xb'
+    """ if args.zxspectrum:
+        for index, line in enumerate(working_file):
+            working_file[index] = re.sub('GO TO' + RE_QUOTES, 'GOTO', line)
+        for index, line in enumerate(working_file):
+            working_file[index] = re.sub('GO SUB' + RE_QUOTES, 'GOSUB', line) """
     if args.split:
         split_string = generate_splitter()
         new_file = list()
@@ -159,7 +175,7 @@ def convert(args):
             new_file.append(new_line)
         working_file = new_file
     if args.label:
-        working_file = label.label_listing(working_file)
+        working_file = label.label_listing(working_file, basic_type)
     if args.c64_list:
         working_file = helpers.c64_list(working_file)
     if args.data_formatter:
@@ -207,6 +223,10 @@ def main():
     parser_convert.add_argument('-c', '--c64-list', action='store_true', default=False, help='Convert from C64List format')
     parser_convert.add_argument('-d', '--data-formatter', action='store_true', default=False, help='Reformat DATA Statments')
     parser_convert.add_argument('-s', '--split', action='store_true', default=False, help='Split a crunched listing')
+    parser_convert.add_argument('-1', '--level1', action='store_true', default=False, help='Use this when processing TRS-80 Level 1 BASIC')
+    parser_convert.add_argument('-a', '--atari', action='store_true', default=False, help='Use this when processing Atari BASIC')
+    parser_convert.add_argument('-t', '--ti99xb', action='store_true', default=False, help='Use this when processing TI99/4A Extended BASIC')
+    #parser_convert.add_argument('-z', '--zxspectrum', action='store_true', default=False, help='Use this when processing ZX Spectrum BASIC')
     parser_convert.add_argument('-o', '--output-filename', dest='output_filename', help='Set the output filename', widget='FileSaver')
     parser_convert.set_defaults(func=convert)
     args = parser.parse_args()

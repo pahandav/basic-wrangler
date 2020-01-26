@@ -113,6 +113,8 @@ def output_basic_listing(Lexer, numbered_file, jump_targets):
                 current_value = token.val
             elif token.type == 'COMMENT':
                 current_value = "'" + token.val[3:]
+            elif token.type == 'PRINT':
+                current_value = 'PRINT'
             else:
                 current_value = token.val
             labeled_file = labeled_file + current_value
@@ -125,9 +127,8 @@ def output_basic_listing(Lexer, numbered_file, jump_targets):
         labeled_file = labeled_file + '\n'
     return labeled_file
 
-def label_listing(numbered_file):
+def label_listing(numbered_file, basic_type):
     """ This function returns a labeled BASIC listing. """
-    basic_type = 'generic'
     Lexer = generate_label_lexer(basic_type)
     original_line_numbers = sanity_check_listing(Lexer, numbered_file)
     jump_targets = extract_jump_targets(Lexer, numbered_file, original_line_numbers)

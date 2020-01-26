@@ -16,7 +16,7 @@ def generate_splitter():
 
 def generate_label_lexer(basic_type):
     """ Generates a lexer for converting to labelled format. """
-    regex_dict_order = ['LINE', 'KEYWORDS', 'FLOW', 'NUMBER', 'COMMENT', 'DATA', 'LET', 'ID', 'STATEMENT', 'STRING', 'PUNCTUATION']
+    regex_dict_order = ['LINE', 'KEYWORDS', 'FLOW', 'NUMBER', 'COMMENT', 'DATA', 'LET', 'ID', 'STATEMENT', 'STRING', 'PRINT', 'PUNCTUATION']
     yaml_path = Path.joinpath(SCRIPT_DIR, 'label.yaml')
     with open(yaml_path) as yaml_file:
         yaml_dict = yaml.safe_load(yaml_file)
