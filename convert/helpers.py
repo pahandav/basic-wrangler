@@ -19,19 +19,19 @@ def c64_list(input_file):
 
 def data_format(input_file):
     """ This reformats DATA statements. """
-    data_statement = '#data\n'
+    data_statement = '\n#data\n'
+    remove_list = list()
     for index, line in enumerate(input_file):
         if line.startswith('DATA'):
-            old_index = index
             stripped = line.lstrip('DATA')
             # This replaces every comma in between data statement values not in quotes with a newline
             temp = stripped + '\n'
             temp = re.sub(',' + RE_QUOTES, '\n', temp)
             temp = temp.lstrip()
             data_statement = data_statement + temp
-            input_file[index] = ''
+            remove_list.append(index)
     data_statement = data_statement + '#enddata'
-    final = input_file[0:old_index]
-    #final = list(filter(None, input_file))
+    # This removes the original DATA statements from the file - Thanks to Igor Chubin on stackoverflow
+    final = [i for j, i in enumerate(input_file) if j not in remove_list]
     final.append(data_statement)
     return final

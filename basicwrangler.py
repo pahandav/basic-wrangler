@@ -18,6 +18,7 @@ import convert.helpers as helpers
 import defs.basdefs as basdefs
 import renum.renumber as renumber
 import convert.label as label
+from lex.genlex import generate_splitter
 # constants
 from common.constants import RE_QUOTES
 
@@ -148,6 +149,15 @@ def convert(args):
         original_file = file.read()
     split_file = original_file.splitlines()
     working_file = functions.strip_file(split_file)
+    if args.split:
+        split_string = generate_splitter()
+        new_file = list()
+        for line in working_file:
+            temp1 = re.split('(' + split_string + r'|\".*?\")', line)
+            temp2 = [x for x in temp1 if x.strip()]
+            new_line = ' '.join(temp2)
+            new_file.append(new_line)
+        working_file = new_file
     if args.label:
         working_file = label.label_listing(working_file)
     if args.c64_list:
@@ -196,6 +206,7 @@ def main():
     parser_convert.add_argument('-l', '--label', action='store_true', default=False, help='Convert from numbered listing')
     parser_convert.add_argument('-c', '--c64-list', action='store_true', default=False, help='Convert from C64List format')
     parser_convert.add_argument('-d', '--data-formatter', action='store_true', default=False, help='Reformat DATA Statments')
+    parser_convert.add_argument('-s', '--split', action='store_true', default=False, help='Split a crunched listing')
     parser_convert.add_argument('-o', '--output-filename', dest='output_filename', help='Set the output filename', widget='FileSaver')
     parser_convert.set_defaults(func=convert)
     args = parser.parse_args()

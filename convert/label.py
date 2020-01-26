@@ -90,6 +90,16 @@ def output_basic_listing(Lexer, numbered_file, jump_targets):
                     continue
                 else:
                     continue
+            if token.type == 'STATEMENT' and tokenized_line[index+1].type == 'COMMENT':
+                labeled_file = labeled_file + ' '
+                set_flow = False
+                set_on = False
+                continue
+            elif token.type == 'STATEMENT':
+                labeled_file = labeled_file.rstrip() + '\n'
+                set_flow = False
+                set_on = False
+                continue
             if set_on and token.type == 'NUMBER':
                 current_value = '_' + token.val
             elif set_flow and not set_on:
@@ -107,7 +117,10 @@ def output_basic_listing(Lexer, numbered_file, jump_targets):
                 current_value = token.val
             labeled_file = labeled_file + current_value
             if index+1 < tokenized_line_length:
-                if not token.type == 'PUNCTUATION' and not tokenized_line[index+1].type == 'PUNCTUATION':
+                if not token.type == 'PUNCTUATION' and not tokenized_line[index+1].type == 'PUNCTUATION' and not token.type == 'STATEMENT':
+                    labeled_file = labeled_file + ' '
+                # The following elif is not redundant. It fixes formatting errors.
+                elif tokenized_line[index+1].type == 'FLOW' and not token.type == 'STATEMENT':
                     labeled_file = labeled_file + ' '
         labeled_file = labeled_file + '\n'
     return labeled_file
