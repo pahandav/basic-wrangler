@@ -56,10 +56,14 @@ def fix_spacing(line):
 def check_new_line(line):
     """ Checks to see if a new line is mandatory. """
     need_new_line = False
-    if 'IF' in line: need_new_line = True
-    if 'GOTO' in line: need_new_line = True
-    if 'RETURN' in line: need_new_line = True
-    if line[0].startswith('DATA') or line[0].startswith('D.') or line[0].startswith('REM'): need_new_line = True
+    if 'IF' in line:
+        need_new_line = True
+    if 'GOTO' in line:
+        need_new_line = True
+    if 'RETURN' in line:
+        need_new_line = True
+    if line[0].startswith('DATA') or line[0].startswith('D.') or line[0].startswith('REM'):
+        need_new_line = True
     return need_new_line
 
 def determine_line_length(line, basic_defs, line_replacement):

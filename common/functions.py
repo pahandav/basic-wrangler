@@ -1,4 +1,5 @@
 """ This module contains functions that are accessed from multiple other modules. """
+
 import logging
 import re
 
@@ -33,8 +34,7 @@ def reformat_data_statements(input_file, basic_defs):
         if line.startswith('#data'):
             start_data_block = index + 1
             break
-        else:
-            output_file.append(line)
+        output_file.append(line)
     for index, line in enumerate(input_file):
         if line.startswith('#enddata'):
             end_data_block = index

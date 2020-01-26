@@ -1,26 +1,22 @@
 #!/usr/bin/env python3
 """ basic-wrangler - A BASIC program listing line renumberer/cruncher. """
 
-import argparse
-import json
 import logging
 import re
 import sys
-import duallog
-from collections import namedtuple
-from pathlib import Path
 
+import duallog
 import pyperclip
 from gooey import Gooey, GooeyParser
 
 import common.functions as functions
 import convert.helpers as helpers
+import convert.label as label
 import defs.basdefs as basdefs
 import renum.renumber as renumber
-import convert.label as label
-from lex.genlex import generate_splitter
 # constants
 from common.constants import RE_QUOTES
+from lex.genlex import generate_splitter
 
 if len(sys.argv) >= 2:
     if not '--ignore-gooey' in sys.argv:
@@ -207,26 +203,26 @@ def main():
     subparsers = parser.add_subparsers(help='sub-command help')
     # renumber subparser
     parser_renum = subparsers.add_parser('renum', help='renum help')
-    parser_renum.add_argument('basic_type', choices=basdefs.get_basic_dialects(), metavar='BASIC_Type', help='Specify the BASIC dialect to use')
-    parser_renum.add_argument('input_filename', metavar='filename', help='Specify the file to process', widget='FileChooser')
-    parser_renum.add_argument('-o', '--output-filename', dest='output_filename', help='Set the output filename', widget='FileSaver')
-    parser_renum.add_argument('-p', '--paste-mode', dest='paste_mode', action='store_true', default=False, help='Sets paste to clipboard mode')
-    parser_renum.add_argument('-l', '--line-length', dest='line_length', type=int, help='Set a non-default maximum BASIC line length')
-    parser_renum.add_argument('-n', '--numbering_start', dest='numbering', type=int, help='Set the line number to begin numbering with')
-    parser_renum.add_argument('-i', '--increment', dest='increment', type=int, help='Set the increment between BASIC lines')
+    parser_renum.add_argument('basic_type', choices=basdefs.get_basic_dialects(), metavar='BASIC_Type', help='Specify the BASIC dialect to use.')
+    parser_renum.add_argument('input_filename', metavar='filename', help='Specify the file to process.', widget='FileChooser')
+    parser_renum.add_argument('-o', '--output-filename', dest='output_filename', help='Set the output filename.', widget='FileSaver')
+    parser_renum.add_argument('-p', '--paste-mode', dest='paste_mode', action='store_true', default=False, help='Sets paste to clipboard mode.')
+    parser_renum.add_argument('-l', '--line-length', dest='line_length', type=int, help='Set a non-default maximum BASIC line length.')
+    parser_renum.add_argument('-n', '--numbering_start', dest='numbering', type=int, help='Set the line number to begin numbering with.')
+    parser_renum.add_argument('-i', '--increment', dest='increment', type=int, help='Set the increment between BASIC lines.')
     parser_renum.set_defaults(func=renum)
     # convert subparser
     parser_convert = subparsers.add_parser('convert', help='convert help')
     group1 = parser_convert.add_argument_group('Dialect Handlers', 'Handles special BASIC dialects.')
     mxg1 = group1.add_mutually_exclusive_group()
-    parser_convert.add_argument('input_filename', metavar='filename', help='Specify the file to process', widget='FileChooser')
-    parser_convert.add_argument('-c', '--c64-list', action='store_true', default=False, help='Convert from C64List format')
-    parser_convert.add_argument('-d', '--data-formatter', action='store_true', default=False, help='Reformat DATA Statments')
-    parser_convert.add_argument('-s', '--split', action='store_true', default=False, help='Split a crunched listing')
-    parser_convert.add_argument('-o', '--output-filename', dest='output_filename', help='Set the output filename', widget='FileSaver')
-    mxg1.add_argument('-1', '--level1', action='store_true', default=False, help='Use this when processing TRS-80 Level 1 BASIC')
-    mxg1.add_argument('-a', '--atari', action='store_true', default=False, help='Use this when processing Atari BASIC')
-    mxg1.add_argument('-t', '--ti99xb', action='store_true', default=False, help='Use this when processing TI99/4A Extended BASIC')
+    parser_convert.add_argument('input_filename', metavar='filename', help='Specify the file to process.', widget='FileChooser')
+    parser_convert.add_argument('-c', '--c64-list', action='store_true', default=False, help='Convert from C64List format.')
+    parser_convert.add_argument('-d', '--data-formatter', action='store_true', default=False, help='Reformat DATA Statments.')
+    parser_convert.add_argument('-s', '--split', action='store_true', default=False, help='Split a crunched listing.')
+    parser_convert.add_argument('-o', '--output-filename', dest='output_filename', help='Set the output filename.', widget='FileSaver')
+    mxg1.add_argument('-1', '--level1', action='store_true', default=False, help='Use this when processing TRS-80 Level 1 BASIC.')
+    mxg1.add_argument('-a', '--atari', action='store_true', default=False, help='Use this when processing Atari BASIC.')
+    mxg1.add_argument('-t', '--ti99xb', action='store_true', default=False, help='Use this when processing TI99/4A Extended BASIC.')
     #parser_convert.add_argument('-z', '--zxspectrum', action='store_true', default=False, help='Use this when processing ZX Spectrum BASIC')
     parser_convert.set_defaults(func=convert)
     args = parser.parse_args()

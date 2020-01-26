@@ -1,9 +1,11 @@
 """ This script contains the routines to convert a numbered listing to a labelled listing. """
 
+import logging
+import sys
+
 from lex.genlex import generate_label_lexer
 from lex.lexer import LexerError
-import sys
-import logging
+
 
 def tokenize_line(Lexer, untokenized_line, line_no):
     """ This function returns a tokenized line as a list. """

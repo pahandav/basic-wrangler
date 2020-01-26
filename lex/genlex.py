@@ -1,9 +1,12 @@
 """ This script contains functions to generate lexers. """
 
-import lex.lexer as lexer
-import yaml
-from pathlib import Path
 import logging
+from pathlib import Path
+
+import yaml
+
+import lex.lexer as lexer
+
 SCRIPT_DIR = Path(__file__).resolve().parent
 
 def generate_splitter():

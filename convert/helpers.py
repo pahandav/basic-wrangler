@@ -1,6 +1,6 @@
 """ This contains former helper scripts. """
+
 import re
-import sys
 
 RE_QUOTES = r'(?=([^"]*"[^"]*")*[^"]*$)'
 

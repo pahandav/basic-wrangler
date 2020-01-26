@@ -3,21 +3,20 @@ import logging
 import re
 from collections import namedtuple
 from pathlib import Path
-import sys
 
 import yaml
 
 from common.constants import RE_QUOTES
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-def abbreviate(working_file, basic_type, reversed=False):
+def abbreviate(working_file, basic_type, reverse_this=False):
     """ Returns the file with keywords abbreviated. """
     yaml_path = Path.joinpath(SCRIPT_DIR, 'abbrevs.yaml')
     with open(yaml_path) as yaml_file:
         yaml_dict = yaml.safe_load(yaml_file)
     abbrev_dict = yaml_dict[basic_type]
     reversed_dict = dict()
-    if reversed:
+    if reverse_this:
         reversed_dict = {v.replace('.', '[.]'): k for k, v in abbrev_dict.items()}
         for key in sorted(reversed_dict, key=len, reverse=True):
             for index, line in enumerate(working_file):
