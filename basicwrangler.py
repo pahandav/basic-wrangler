@@ -156,11 +156,11 @@ def convert(args):
         working_file = basdefs.abbreviate(working_file, basic_type, True)
     if args.ti99xb:
         basic_type = 'ti99xb'
-    """ if args.zxspectrum:
+    if args.zxspectrum:
         for index, line in enumerate(working_file):
             working_file[index] = re.sub('GO TO' + RE_QUOTES, 'GOTO', line)
         for index, line in enumerate(working_file):
-            working_file[index] = re.sub('GO SUB' + RE_QUOTES, 'GOSUB', line) """
+            working_file[index] = re.sub('GO SUB' + RE_QUOTES, 'GOSUB', line)
     if args.split:
         split_string = generate_splitter()
         new_file = list()
@@ -223,7 +223,7 @@ def main():
     mxg1.add_argument('-1', '--level1', action='store_true', default=False, help='Use this when processing TRS-80 Level 1 BASIC.')
     mxg1.add_argument('-a', '--atari', action='store_true', default=False, help='Use this when processing Atari BASIC.')
     mxg1.add_argument('-t', '--ti99xb', action='store_true', default=False, help='Use this when processing TI99/4A Extended BASIC.')
-    #parser_convert.add_argument('-z', '--zxspectrum', action='store_true', default=False, help='Use this when processing ZX Spectrum BASIC')
+    mxg1.add_argument('-z', '--zxspectrum', action='store_true', default=False, help='Use this when processing ZX Spectrum BASIC')
     parser_convert.set_defaults(func=convert)
     args = parser.parse_args()
     args.func(args)
