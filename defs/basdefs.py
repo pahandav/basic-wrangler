@@ -10,7 +10,7 @@ from common.constants import RE_QUOTES
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 def abbreviate(working_file, basic_type, reverse_this=False):
-    """ Returns the file with keywords abbreviated. """
+    """ Returns the file with keywords abbreviated or with the abbreviations removed. """
     yaml_path = Path.joinpath(SCRIPT_DIR, 'abbrevs.yaml')
     with open(yaml_path) as yaml_file:
         yaml_dict = yaml.safe_load(yaml_file)

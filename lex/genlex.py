@@ -1,4 +1,4 @@
-""" This script contains functions to generate lexers. """
+""" This module contains functions to generate lexers. """
 
 import logging
 from pathlib import Path
@@ -10,7 +10,7 @@ import lex.lexer as lexer
 SCRIPT_DIR = Path(__file__).resolve().parent
 
 def generate_splitter():
-    """ Loads the split regex from the file. """
+    """ Loads the splitting regex from the file. """
     yaml_path = Path.joinpath(SCRIPT_DIR, 'label.yaml')
     with open(yaml_path) as yaml_file:
         yaml_dict = yaml.safe_load(yaml_file)

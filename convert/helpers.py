@@ -1,4 +1,4 @@
-""" This contains former helper scripts. """
+""" This module contains former helper scripts. """
 
 import re
 

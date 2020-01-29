@@ -1,4 +1,4 @@
-""" This script contains the routines to convert a numbered listing to a labelled listing. """
+""" This module contains the routines to convert a numbered listing to a labelled listing. """
 
 import logging
 import sys
@@ -8,7 +8,7 @@ from lex.lexer import LexerError
 
 
 def tokenize_line(Lexer, untokenized_line, line_no):
-    """ This function returns a tokenized line as a list. """
+    """ This function returns an untokenized line as a list of tokens. """
     Lexer.input(untokenized_line)
     token_list = list()
     try:
