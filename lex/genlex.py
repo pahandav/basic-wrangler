@@ -29,5 +29,8 @@ def generate_label_lexer(basic_type):
         temp_tuple = (regex_dict[key], key)
         rules.append(temp_tuple)
     logging.debug(rules)
-    lx = lexer.Lexer(rules, skip_whitespace=True)
+    if basic_type.startswith('cbm'):
+        lx = lexer.Lexer(rules, skip_whitespace=True, ignore_case=True)
+    else:
+        lx = lexer.Lexer(rules, skip_whitespace=True)
     return lx

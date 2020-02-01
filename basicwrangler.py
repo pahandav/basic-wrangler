@@ -166,8 +166,12 @@ def convert(args):
     if args.split:
         split_string = generate_splitter()
         new_file = list()
+        if basic_type.startswith('cbm'):
+            splitter = re.compile('(' + split_string + r'|\".*?\")', re.IGNORECASE)
+        else:
+            splitter = re.compile('(' + split_string + r'|\".*?\")')
         for line in working_file:
-            temp1 = re.split('(' + split_string + r'|\".*?\")', line)
+            temp1 = re.split(splitter, line)
             temp2 = [x for x in temp1 if x.strip()]
             new_line = ' '.join(temp2)
             new_file.append(new_line)

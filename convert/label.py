@@ -76,7 +76,7 @@ def extract_jump_targets(Lexer, numbered_file, original_line_numbers):
     logging.debug(jump_targets)
     return jump_targets
 
-def output_basic_listing(Lexer, numbered_file, jump_targets):
+def output_basic_listing(Lexer, numbered_file, jump_targets, basic_type):
     """ Final pass - This function returns the labelled BASIC file. """
     labeled_file = ''
     for line_no, line in enumerate(numbered_file):
@@ -102,23 +102,53 @@ def output_basic_listing(Lexer, numbered_file, jump_targets):
                 set_flow = False
                 set_on = False
                 continue
-            if set_on and token.type == 'NUMBER':
-                current_value = '_' + token.val
-            elif set_flow and not set_on:
-                current_value = '_' + token.val
-                set_flow = False
-            elif token.type == 'FLOW' and token.val == 'ON' and index+1 < tokenized_line_length and tokenized_line[index+1].type == 'ID':
-                set_on = True
-                current_value = token.val
-            elif token.type == 'FLOW' and index+1 < tokenized_line_length and tokenized_line[index+1].type == 'NUMBER':
-                set_flow = True
-                current_value = token.val
-            elif token.type == 'COMMENT':
-                current_value = "'" + token.val[3:]
-            elif token.type == 'PRINT':
-                current_value = 'PRINT'
+            if basic_type.startswith('cbm'):
+                # Format into upper-case correctly for CBM BASIC
+                if set_on and token.type == 'NUMBER':
+                    current_value = '_' + token.val
+                elif set_flow and not set_on:
+                    current_value = '_' + token.val
+                    set_flow = False
+                elif token.type == 'FLOW' and token.val == 'ON' and index+1 < tokenized_line_length and tokenized_line[index+1].type == 'ID':
+                    set_on = True
+                    current_value = token.val.upper()
+                elif token.type == 'FLOW' and index+1 < tokenized_line_length and tokenized_line[index+1].type == 'NUMBER':
+                    set_flow = True
+                    current_value = token.val.upper()
+                elif token.type == 'COMMENT' and token.val.islower():
+                    current_value = "'" + token.val[3:].upper()
+                elif token.type == 'COMMENT':
+                    current_value = "'" + token.val[3:]
+                elif token.type == 'DATA' and token.val.islower():
+                    current_value = token.val.upper()
+                elif token.type == 'DATA':
+                    current_value = "DATA" + token.val[4:]
+                elif token.type == 'STRING' and token.val.islower():
+                    current_value = token.val.upper()
+                elif token.type == 'STRING':
+                    current_value = token.val
+                elif token.type == 'PRINT':
+                    current_value = 'PRINT'
+                else:
+                    current_value = token.val.upper()
             else:
-                current_value = token.val
+                if set_on and token.type == 'NUMBER':
+                    current_value = '_' + token.val
+                elif set_flow and not set_on:
+                    current_value = '_' + token.val
+                    set_flow = False
+                elif token.type == 'FLOW' and token.val == 'ON' and index+1 < tokenized_line_length and tokenized_line[index+1].type == 'ID':
+                    set_on = True
+                    current_value = token.val
+                elif token.type == 'FLOW' and index+1 < tokenized_line_length and tokenized_line[index+1].type == 'NUMBER':
+                    set_flow = True
+                    current_value = token.val
+                elif token.type == 'COMMENT':
+                    current_value = "'" + token.val[3:]
+                elif token.type == 'PRINT':
+                    current_value = 'PRINT'
+                else:
+                    current_value = token.val
             labeled_file = labeled_file + current_value
             if index+1 < tokenized_line_length:
                 if not token.type == 'PUNCTUATION' and not tokenized_line[index+1].type == 'PUNCTUATION' and not token.type == 'STATEMENT':
@@ -134,6 +164,6 @@ def label_listing(numbered_file, basic_type):
     Lexer = generate_label_lexer(basic_type)
     original_line_numbers = sanity_check_listing(Lexer, numbered_file)
     jump_targets = extract_jump_targets(Lexer, numbered_file, original_line_numbers)
-    labeled_list = output_basic_listing(Lexer, numbered_file, jump_targets)
+    labeled_list = output_basic_listing(Lexer, numbered_file, jump_targets, basic_type)
     labeled_file = labeled_list.splitlines()
     return labeled_file

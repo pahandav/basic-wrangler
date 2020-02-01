@@ -1,7 +1,7 @@
-0input"80-columns?";a$:z=rnd(-ti):ifa$<>"y"then2
+0input"80-Columns?";a$:z=rnd(-ti):ifa$<>"y"then2
 1graphic5:fast
 2printchr$(147):z=0:y=1:a=z:t=z:v=13:c=44:d=z:e=z:r=z:x=2:i=z:j=z:dima(c):g=100:h=4:k=512:l=32:u=16:n=255:o=99:f=65535:q=6:s=3841:b=4096:m=39:p=y:w=z:fori=ztoc:reada(i):nexti:print"welcome to the battle system test!":print:print
-3print"two soldiers approach.":print
+3print"Two soldiers approach.":print
 4ifa(v*a)=zthen7
 5ifa=zthen23
 6t=z:goto45
@@ -13,15 +13,15 @@
 12ifa(v*x)=zthend=d+y
 13ifd=xthen15
 14goto4
-15print"you are victorious.":print:w=w+y:a=z:t=z:ifw>=10thengosub21
-16fori=ytox:a(i*v)=a(i*v+y):nexti:gosub82:ifr<12.5thenprint"you obtained a potion!"
+15print"You are victorious.":print:w=w+y:a=z:t=z:ifw>=10thengosub21
+16fori=ytox:a(i*v)=a(i*v+y):nexti:gosub82:ifr<12.5thenprint"You obtained a Potion!"
 17ifr<12.5thenprint
 18ifr<12.5thenp=p+y
 19ifp>othenp=o
 20goto3
 21gosub82:ifr>=25thenreturn
-22fori=vtom-y:a(i)=a(i)*1.5:nexti:print"the enemies have powered up!":print:return
-23print:printa(z);"/";a(y);"hp":printa(x);"/";a(3);"mp":print:print"(a) attack":print"(m) magic":print"(i) items":print"(q) quit"
+22fori=vtom-y:a(i)=a(i)*1.5:nexti:print"The enemies have powered up!":print:return
+23print:printa(z);"/";a(y);"hp":printa(x);"/";a(3);"mp":print:print"(A) Attack":print"(M) Magic":print"(I) Items":print"(Q) Quit"
 24geta$:ifa$=""then24
 25ifa$="a"ora$="a"then30
 26ifa$="m"ora$="m"then34
@@ -32,7 +32,7 @@
 31ifc>xthen30
 32ifc<zthen30
 33goto45
-34print:print"(1) lightning -";a(m);"mp":print"(2) cure -";a(m+3);"mp":print"which spell do you want to cast?":print"type (0) to go back."
+34print:print"(1) Lightning -";a(m);"mp":print"(2) cure -";a(m+3);"mp":print"which spell do you want to cast?":print"type (0) to go back."
 35geta$:ifa$=""then35
 36c=val(a$):ifc=ythen64
 37ifc=xthen74

@@ -37,7 +37,7 @@ class Lexer(object):
     """ A simple regex-based lexer/tokenizer.
         See below for an example of usage.
     """
-    def __init__(self, rules, skip_whitespace=True):
+    def __init__(self, rules, skip_whitespace=True, ignore_case=False):
         """ Create a lexer.
             rules:
                 A list of rules. Each rule is a `regex, type`
@@ -66,7 +66,10 @@ class Lexer(object):
             self.group_type[groupname] = type
             idx += 1
 
-        self.regex = re.compile('|'.join(regex_parts))
+        if ignore_case:
+            self.regex = re.compile('|'.join(regex_parts), re.IGNORECASE)
+        else:
+            self.regex = re.compile('|'.join(regex_parts))
         self.skip_whitespace = skip_whitespace
         self.re_ws_skip = re.compile('\S')
 
