@@ -39,3 +39,7 @@ To load the GUI, type `bw` (a harmless console window might open up behind the m
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md)
+
+## Attribution
+
+Program icon based on an icon made by [Retinaicons](http://www.flaticon.com/authors/retinaicons) from [www.flaticon.com](http://www.flaticon.com)

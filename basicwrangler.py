@@ -198,7 +198,7 @@ def convert(args):
     print(input_filename + ' has been saved as ' + output_filename)
 
 
-@Gooey(program_name='BASIC Wrangler', default_size=(610, 695), navigation='TABBED', menu=[{'name': 'File', 'items': [{'type': 'AboutDialog', 'menuTitle': 'About', 'name': 'BASIC Wrangler', 'description': 'A BASIC program listing line renumberer/cruncher', 'version': VERSION, 'copyright': '© 2020', 'website': 'https://github.com/pahandav/basic-wrangler', 'license': 'GPL v3'}]}])
+@Gooey(program_name='BASIC Wrangler', default_size=(610, 695), navigation='TABBED', image_dir='icon', menu=[{'name': 'File', 'items': [{'type': 'AboutDialog', 'menuTitle': 'About', 'name': 'BASIC Wrangler', 'description': 'A BASIC program listing line renumberer/cruncher', 'version': VERSION, 'copyright': '© 2020', 'website': 'https://github.com/pahandav/basic-wrangler', 'license': 'GPL v3'}]}])
 def main():
     """ The main function. """
     duallog.setup('logs')

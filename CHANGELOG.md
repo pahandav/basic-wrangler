@@ -8,6 +8,7 @@
 - Now only uses one entry point script.
 - Added images to documentation and moved changelog out of main README.
 - 64-bit Windows EXE version now available through pyinstaller.
+- Added a custom icon.
 
 ## 0.04.0 - 2020-01-28
 
