@@ -8,7 +8,9 @@ A BASIC program listing line renumberer/cruncher (aka, a minifier).
 
 The purpose of BASIC Wrangler is to allow you to write BASIC programs using labels in a dialect-agnostic way. It also combines and crunches lines to take up the least amount of space, thus saving you memory. It is designed to be able to work with almost any dialect of line numbered BASIC.
 
-Check out [the Manual](docs\Manual.asc) in the docs directory.
+## Basic Usage
+
+Type just `bw` to load the GUI. Type `bw -h` for CLI help. For more, check out [the Manual](docs/Manual.asc) in the docs directory.
 
 ## Some of the Planned Features
 
