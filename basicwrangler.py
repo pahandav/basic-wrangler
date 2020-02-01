@@ -141,22 +141,21 @@ def convert(args):
     """ Converts between listing formats. """
     input_filename = args.input_filename
     user_filename = args.output_filename
+    if args.basic_type:
+        basic_type = args.basic_type
+    else:
+        basic_type = 'generic'
     with open(input_filename) as file:
         original_file = file.read()
-    if args.level1:
+    if basic_type == 'trs80l1':
         original_file = original_file.upper()
     split_file = original_file.splitlines()
     working_file = functions.strip_file(split_file)
-    basic_type = 'generic'
-    if args.level1:
-        basic_type = 'trs80l1'
+    if basic_type == 'trs80l1':
         working_file = basdefs.abbreviate(working_file, basic_type, True)
-    if args.atari:
-        basic_type = 'atari'
+    if basic_type == 'atari':
         working_file = basdefs.abbreviate(working_file, basic_type, True)
-    if args.ti99xb:
-        basic_type = 'ti99xb'
-    if args.zxspectrum:
+    if basic_type == 'zxspectrum':
         for index, line in enumerate(working_file):
             working_file[index] = re.sub('GO TO' + RE_QUOTES, 'GOTO', line)
         for index, line in enumerate(working_file):
@@ -213,17 +212,12 @@ def main():
     parser_renum.set_defaults(func=renum)
     # convert subparser
     parser_convert = subparsers.add_parser('convert', help='convert help')
-    group1 = parser_convert.add_argument_group('Dialect Handlers', 'Handles special BASIC dialects.')
-    mxg1 = group1.add_mutually_exclusive_group()
     parser_convert.add_argument('input_filename', metavar='filename', help='Specify the file to process.', widget='FileChooser')
+    parser_convert.add_argument('-b', '--basic-type', dest='basic_type', choices=basdefs.get_basic_dialects(True), metavar='BASIC_Type', help='Specify the BASIC dialect to use.')
     parser_convert.add_argument('-c', '--c64-list', action='store_true', default=False, help='Convert from C64List format.')
     parser_convert.add_argument('-d', '--data-formatter', action='store_true', default=False, help='Reformat DATA Statments.')
     parser_convert.add_argument('-s', '--split', action='store_true', default=False, help='Split a crunched listing.')
     parser_convert.add_argument('-o', '--output-filename', dest='output_filename', help='Set the output filename.', widget='FileSaver')
-    mxg1.add_argument('-1', '--level1', action='store_true', default=False, help='Use this when processing TRS-80 Level 1 BASIC.')
-    mxg1.add_argument('-a', '--atari', action='store_true', default=False, help='Use this when processing Atari BASIC.')
-    mxg1.add_argument('-t', '--ti99xb', action='store_true', default=False, help='Use this when processing TI99/4A Extended BASIC.')
-    mxg1.add_argument('-z', '--zxspectrum', action='store_true', default=False, help='Use this when processing ZX Spectrum BASIC')
     parser_convert.set_defaults(func=convert)
     args = parser.parse_args()
     args.func(args)

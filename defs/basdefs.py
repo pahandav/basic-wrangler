@@ -7,6 +7,7 @@ from pathlib import Path
 import yaml
 
 from common.constants import RE_QUOTES
+from common.constants import NO_TOKENIZER
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 def abbreviate(working_file, basic_type, reverse_this=False):
@@ -27,12 +28,15 @@ def abbreviate(working_file, basic_type, reverse_this=False):
                 working_file[index] = re.sub(key + RE_QUOTES, abbrev_dict[key], line)
     return working_file
 
-def get_basic_dialects():
+def get_basic_dialects(convert=False):
     """ Returns a list of BASIC dialects from the basdefs.yaml file. """
     yaml_path = Path.joinpath(SCRIPT_DIR, 'basdefs.yaml')
     with open(yaml_path) as yaml_file:
         yaml_dict = yaml.safe_load(yaml_file)
     dialect_list = sorted([a for a in yaml_dict])
+    if convert:
+        for dialect in NO_TOKENIZER:
+            dialect_list.remove(dialect)
     return dialect_list
 
 def set_basic_defs(basic_type, paste_format, basic_line_length, numbering, increment):
