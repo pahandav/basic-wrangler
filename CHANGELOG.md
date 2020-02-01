@@ -7,6 +7,7 @@
 - Added a handler for Commodore 8-bit BASIC upper/lowercase.
 - Now only uses one entry point script.
 - Added images to documentation and moved changelog out of main README.
+- Windows EXE version now available through pyinstaller.
 
 ## 0.04.0 - 2020-01-28
 

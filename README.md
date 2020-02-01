@@ -24,7 +24,7 @@ The purpose of BASIC Wrangler is to allow you to write BASIC programs using labe
 
 ## Basic Usage
 
-To load the GUI, type `bw`. Type `bw -h` for CLI help. For more, check out [the Manual](docs/Manual.asc) in the docs directory.
+To load the GUI, type `bw` (a harmless console window will open up behind the main window -- ignore it). Type `bw -h` for CLI help. For more, check out [the Manual](docs/Manual.asc) in the docs directory.
 
 ## Some of the Planned Features
 
@@ -35,3 +35,7 @@ To load the GUI, type `bw`. Type `bw -h` for CLI help. For more, check out [the 
 - [ ] Renaming variables
 - [ ] Support for external tokenizers by accounting for how many bytes each token uses
 - [x] Support for output to files that can be transferred directly into disk images
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md)
