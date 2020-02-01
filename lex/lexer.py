@@ -8,6 +8,7 @@
 # This code is in the public domain
 # Last modified: August 2010
 #-------------------------------------------------------------------------------
+# pylint: disable=anomalous-backslash-in-string
 import re
 
 
@@ -71,7 +72,7 @@ class Lexer(object):
         else:
             self.regex = re.compile('|'.join(regex_parts))
         self.skip_whitespace = skip_whitespace
-        self.re_ws_skip = re.compile('\S')
+        self.re_ws_skip = re.compile(r'\S')
 
     def input(self, buf):
         """ Initialize the lexer with a buffer as input.

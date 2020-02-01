@@ -22,6 +22,7 @@ if len(sys.argv) >= 2:
     if not '--ignore-gooey' in sys.argv:
         sys.argv.append('--ignore-gooey')
 
+VERSION = '0.05.0'
 TOKENIZER_NAME_CONVERSION = {'pet':'cbm4', 'vic20':'cbm2', 'c64':'cbm2', 'plus4':'cbm35', 'c128':'cbm7', 'trs80m4':'trs80l2'}
 CBM_BASIC = ['pet', 'vic20', 'c64', 'plus4', 'c128']
 
@@ -197,7 +198,7 @@ def convert(args):
     print(input_filename + ' has been saved as ' + output_filename)
 
 
-@Gooey(program_name='BASIC Wrangler', default_size=(610, 675), navigation='TABBED')
+@Gooey(program_name='BASIC Wrangler', default_size=(610, 695), navigation='TABBED', menu=[{'name': 'File', 'items': [{'type': 'AboutDialog', 'menuTitle': 'About', 'name': 'BASIC Wrangler', 'description': 'A BASIC program listing line renumberer/cruncher', 'version': VERSION, 'copyright': '© 2020', 'website': 'https://github.com/pahandav/basic-wrangler', 'license': 'GPL v3'}]}])
 def main():
     """ The main function. """
     duallog.setup('logs')
