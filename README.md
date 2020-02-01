@@ -2,7 +2,21 @@
 
 A BASIC program listing line renumberer/cruncher (aka, a minifier).
 
-**_This program is currently in alpha testing._** It will probably break your program. The documentation is minimal. Things will change frequently.
+**_This program is currently in beta testing._** It will probably break your program. The documentation is minimal. Things will change frequently.
+
+What if you could turn this:
+
+![Example 1](docs/images/example1.png)
+
+Into this:
+
+![Example 2](docs/images/example2.png)
+
+And _then_ turn that into this:
+
+![Example 3](docs/images/example3.png)
+
+With BASIC Wrangler, you can!
 
 ## Purpose
 
@@ -10,7 +24,7 @@ The purpose of BASIC Wrangler is to allow you to write BASIC programs using labe
 
 ## Basic Usage
 
-Type just `bw` to load the GUI. Type `bw -h` for CLI help. For more, check out [the Manual](docs/Manual.asc) in the docs directory.
+To load the GUI, type `bw`. Type `bw -h` for CLI help. For more, check out [the Manual](docs/Manual.asc) in the docs directory.
 
 ## Some of the Planned Features
 
@@ -21,32 +35,3 @@ Type just `bw` to load the GUI. Type `bw -h` for CLI help. For more, check out [
 - [ ] Renaming variables
 - [ ] Support for external tokenizers by accounting for how many bytes each token uses
 - [x] Support for output to files that can be transferred directly into disk images
-
-## Changelog
-
-### 0.04.0 - 2020-01-28
-
-- Added a lexer for tokenizing keywords.
-- Added a native routine for conversion from numbered listings.
-- Major documentation update.
-- Added some more testing files.
-
-### 0.03.0 - 2019-11-22
-
-- Changed the BASIC definition and abbreviation routines to use YAML for the definitions.
-- Changed to QBasic-style labeling.
-- Fixed the DATA statement reformatter.
-- Integrated helper scripts into main program with subcommands.
-- Changed logging routine to output debug logs with duallog.
-- Added seperate entry point scripts.
-
-### 0.02.0 - 2019-10-27
-
-- File mode with more command line arguments
-- Paste mode now places output directly onto the clipboard so you can paste directly into emulators
-- A basic GUI has been added
-- Various minor fixes and refactoring
-
-### 0.01.0 - 2019-10-24
-
-- Initial release
