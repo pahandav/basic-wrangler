@@ -22,7 +22,7 @@ if len(sys.argv) >= 2:
     if not '--ignore-gooey' in sys.argv:
         sys.argv.append('--ignore-gooey')
 
-ALWAYS_FILE_FORMAT = ['bascom', 'amiga', 'riscos', 'gwbasic']
+TOKENIZER_NAME_CONVERSION = {'pet':'cbm4', 'vic20':'cbm2', 'c64':'cbm2', 'plus4':'cbm35', 'c128':'cbm7', 'trs80m4':'trs80l2'}
 CBM_BASIC = ['pet', 'vic20', 'c64', 'plus4', 'c128']
 
 def renum(args):
@@ -142,7 +142,10 @@ def convert(args):
     input_filename = args.input_filename
     user_filename = args.output_filename
     if args.basic_type:
-        basic_type = args.basic_type
+        if args.basic_type in TOKENIZER_NAME_CONVERSION:
+            basic_type = TOKENIZER_NAME_CONVERSION[args.basic_type]
+        else:
+            basic_type = args.basic_type
     else:
         basic_type = 'generic'
     with open(input_filename) as file:
