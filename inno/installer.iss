@@ -33,7 +33,7 @@ SetupIconFile=..\icon\program_icon.ico
 
 [Files]
 Source: ..\dist\bw\*.*; DestDir: {app}; Flags: recursesubdirs
-Source: ..\README-PDF.pdf; DestDir: {app}; DestName: README.pdf; Flags: isreadme; Tasks: 
+Source: ..\README.pdf; DestDir: {app}; Flags: isreadme; Tasks: 
 Source: ..\CHANGELOG.pdf; DestDir: {app}
 Source: ..\docs\Manual.pdf; DestDir: {app}\docs
 
@@ -43,6 +43,9 @@ Name: {group}\Readme; Filename: {app}\README.pdf
 Name: {group}\Changelog; Filename: {app}\CHANGELOG.pdf
 Name: {group}\Manual; Filename: {app}\docs\Manual.pdf
 Name: {commondesktop}\BASIC Wrangler; Filename: {app}\bw.exe; Tasks: 
+
+[UninstallDelete]
+Name: {app}\logs; Type: filesandordirs
 
 [Tasks]
 Name: modifypath; Description: Add application directory to your environmental path
