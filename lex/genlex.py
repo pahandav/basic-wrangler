@@ -9,18 +9,33 @@ import lex.lexer as lexer
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 
+
 def generate_splitter():
     """ Loads the splitting regex from the file. """
-    yaml_path = Path.joinpath(SCRIPT_DIR, 'rules.yaml')
+    yaml_path = Path.joinpath(SCRIPT_DIR, "rules.yaml")
     with open(yaml_path) as yaml_file:
         yaml_dict = yaml.safe_load(yaml_file)
-    split_string = yaml_dict['split']
+    split_string = yaml_dict["split"]
     return split_string
+
 
 def generate_label_lexer(basic_type):
     """ Generates a lexer for converting to labelled format. """
-    regex_dict_order = ['LINE', 'KEYWORDS', 'FLOW', 'NUMBER', 'COMMENT', 'DATA', 'LET', 'ID', 'STATEMENT', 'STRING', 'PRINT', 'PUNCTUATION']
-    yaml_path = Path.joinpath(SCRIPT_DIR, 'rules.yaml')
+    regex_dict_order = [
+        "LINE",
+        "KEYWORDS",
+        "FLOW",
+        "NUMBER",
+        "COMMENT",
+        "DATA",
+        "LET",
+        "ID",
+        "STATEMENT",
+        "STRING",
+        "PRINT",
+        "PUNCTUATION",
+    ]
+    yaml_path = Path.joinpath(SCRIPT_DIR, "rules.yaml")
     with open(yaml_path) as yaml_file:
         yaml_dict = yaml.safe_load(yaml_file)
     regex_dict = yaml_dict[basic_type]
@@ -29,7 +44,7 @@ def generate_label_lexer(basic_type):
         temp_tuple = (regex_dict[key], key)
         rules.append(temp_tuple)
     logging.debug(rules)
-    if basic_type.startswith('cbm'):
+    if basic_type.startswith("cbm"):
         lx = lexer.Lexer(rules, skip_whitespace=True, ignore_case=True)
     else:
         lx = lexer.Lexer(rules, skip_whitespace=True)

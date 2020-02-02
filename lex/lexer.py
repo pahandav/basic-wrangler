@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # lexer.py
 #
 # A generic regex-based Lexer/tokenizer tool.
@@ -7,7 +7,7 @@
 # Eli Bendersky (eliben@gmail.com)
 # This code is in the public domain
 # Last modified: August 2010
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # pylint: disable=anomalous-backslash-in-string
 import re
 
@@ -16,13 +16,14 @@ class Token(object):
     """ A simple Token structure.
         Contains the token type, value and position.
     """
+
     def __init__(self, type, val, pos):
         self.type = type
         self.val = val
         self.pos = pos
 
     def __str__(self):
-        return '%s(%s) at %s' % (self.type, self.val, self.pos)
+        return "%s(%s) at %s" % (self.type, self.val, self.pos)
 
 
 class LexerError(Exception):
@@ -30,6 +31,7 @@ class LexerError(Exception):
         pos:
             Position in the input line where the error occurred.
     """
+
     def __init__(self, pos):
         self.pos = pos
 
@@ -38,6 +40,7 @@ class Lexer(object):
     """ A simple regex-based lexer/tokenizer.
         See below for an example of usage.
     """
+
     def __init__(self, rules, skip_whitespace=True, ignore_case=False):
         """ Create a lexer.
             rules:
@@ -62,17 +65,17 @@ class Lexer(object):
         self.group_type = {}
 
         for regex, type in rules:
-            groupname = 'GROUP%s' % idx
-            regex_parts.append('(?P<%s>%s)' % (groupname, regex))
+            groupname = "GROUP%s" % idx
+            regex_parts.append("(?P<%s>%s)" % (groupname, regex))
             self.group_type[groupname] = type
             idx += 1
 
         if ignore_case:
-            self.regex = re.compile('|'.join(regex_parts), re.IGNORECASE)
+            self.regex = re.compile("|".join(regex_parts), re.IGNORECASE)
         else:
-            self.regex = re.compile('|'.join(regex_parts))
+            self.regex = re.compile("|".join(regex_parts))
         self.skip_whitespace = skip_whitespace
-        self.re_ws_skip = re.compile(r'\S')
+        self.re_ws_skip = re.compile(r"\S")
 
     def input(self, buf):
         """ Initialize the lexer with a buffer as input.
@@ -115,5 +118,6 @@ class Lexer(object):
         """
         while 1:
             tok = self.token()
-            if tok is None: break
+            if tok is None:
+                break
             yield tok
