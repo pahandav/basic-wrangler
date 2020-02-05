@@ -3,7 +3,7 @@
 import logging
 import re
 
-from common.constants import RE_QUOTES
+from basicwrangler.common.constants import RE_QUOTES
 
 
 def strip_file(unstripped):

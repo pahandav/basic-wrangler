@@ -1,13 +1,18 @@
 """ This module contains functions to generate lexers. """
 
 import logging
+import sys
 from pathlib import Path
 
 import yaml
 
-import lex.lexer as lexer
+import basicwrangler.lex.lexer as lexer
 
-SCRIPT_DIR = Path(__file__).resolve().parent
+# This is needed to find files when running with pyinstaller.
+if hasattr(sys, "_MEIPASS"):
+    SCRIPT_DIR = Path.joinpath(Path(sys._MEIPASS).resolve(), "lex")  # type: ignore # pylint: disable=no-member
+else:
+    SCRIPT_DIR = Path(__file__).resolve().parent
 
 
 def generate_splitter():

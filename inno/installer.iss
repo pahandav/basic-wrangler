@@ -1,6 +1,6 @@
 [Setup]
 AppName=BASIC Wrangler
-AppVersion=0.05.0
+AppVersion=0.5.0
 DefaultDirName={userpf}\basicwrangler
 DefaultGroupName=BASIC Wrangler
 UninstallDisplayIcon={app}\bw.exe
@@ -10,26 +10,19 @@ LZMANumFastBytes=128
 LZMADictionarySize=102400
 SolidCompression=true
 OutputDir=..\dist
-; "ArchitecturesAllowed=x64" specifies that Setup cannot run on
-; anything but x64.
-ArchitecturesAllowed=x64
-; "ArchitecturesInstallIn64BitMode=x64" requests that the install be
-; done in "64-bit mode" on x64, meaning it should use the native
-; 64-bit Program Files directory and the 64-bit view of the registry.
-ArchitecturesInstallIn64BitMode=x64
 InternalCompressLevel=ultra64
-OutputBaseFilename=BASIC-Wrangler-0.05.0-setup
-VersionInfoVersion=0.05.0
-VersionInfoTextVersion=0.05.0
+OutputBaseFilename=BASIC-Wrangler-0.5.0-setup
+VersionInfoVersion=0.5.0
+VersionInfoTextVersion=0.5.0
 VersionInfoCopyright=2020, pahandav
-VersionInfoProductName=0.05.0
-VersionInfoProductVersion=0.05.0
+VersionInfoProductName=0.5.0
+VersionInfoProductVersion=0.5.0
 AppCopyright=2019, pahandav
-AppVerName=0.05.0
+AppVerName=0.5.0
 LicenseFile=..\LICENSE
 AppPublisher=pahandav
 UninstallDisplayName=BASIC Wrangler
-SetupIconFile=..\icon\program_icon.ico
+SetupIconFile=..\src\basicwrangler\icon\program_icon.ico
 
 [Files]
 Source: ..\dist\bw\*.*; DestDir: {app}; Flags: recursesubdirs

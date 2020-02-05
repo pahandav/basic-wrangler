@@ -2,28 +2,43 @@
 """ basic-wrangler - A BASIC program listing line renumberer/cruncher. """
 
 import logging
+import os
 import re
 import sys
+from pathlib import Path
 
 import duallog
 import pyperclip
 from gooey import Gooey, GooeyParser
 
-import common.functions as functions
-import convert.helpers as helpers
-import convert.label as label
-import defs.basdefs as basdefs
-import renum.renumber as renumber
+import basicwrangler.common.functions as functions
+import basicwrangler.convert.helpers as helpers
+import basicwrangler.convert.label as label
+import basicwrangler.defs.basdefs as basdefs
+import basicwrangler.renum.renumber as renumber
 
 # constants
-from common.constants import RE_QUOTES
-from lex.genlex import generate_splitter
+from basicwrangler.common.constants import RE_QUOTES
+from basicwrangler.lex.genlex import generate_splitter
 
+# This is needed to make the GUI version work on Windows.
+if os.name == "nt":
+    TARGET_EXE = "bw.exe"
+else:
+    TARGET_EXE = "bw"
+
+# This is needed to make it not load the GUI when you only want to run the CLI.
 if len(sys.argv) >= 2:
     if not "--ignore-gooey" in sys.argv:
         sys.argv.append("--ignore-gooey")
 
-VERSION = "0.05.0"
+# This is needed to find files when running with pyinstaller.
+if hasattr(sys, "_MEIPASS"):
+    ICON_DIR = Path.joinpath(Path(sys._MEIPASS).resolve(), "icon")  # type: ignore # pylint: disable=no-member
+else:
+    ICON_DIR = Path.joinpath(Path(__file__).resolve().parent, "icon")
+
+VERSION = "0.5.0"
 TOKENIZER_NAME_CONVERSION = {
     "pet": "cbm4",
     "vic20": "cbm2",
@@ -215,7 +230,8 @@ def convert(args):
     program_name="BASIC Wrangler",
     default_size=(610, 695),
     navigation="TABBED",
-    image_dir="icon",
+    target=TARGET_EXE,
+    image_dir=ICON_DIR,
     menu=[
         {
             "name": "File",

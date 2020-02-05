@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.1 - 2020-02-05
+
+- There's been a bunch of internal changes due to converting this to be installable by pip from PyPI. It should still work **_exactly_** the same, but some bugs might have slipped through.
+- The leading zero on the middle of the version number is now gone.
+- Now installable through pip.
+- The Windows version is now 32-bit, as 64-bit was kind of overkill. The installer is now smaller as a result.
+
 ## 0.05.0 - 2020-02-01
 
 - Added keywords for Apple /// Business BASIC, Color Computer BASIC, ZX81 BASIC, and ZX Spectrum BASIC.

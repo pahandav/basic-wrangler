@@ -4,8 +4,8 @@
 import logging
 import sys
 
-from lex.genlex import generate_label_lexer
-from lex.lexer import LexerError
+from basicwrangler.lex.genlex import generate_label_lexer
+from basicwrangler.lex.lexer import LexerError
 
 
 def tokenize_line(Lexer, untokenized_line, line_no):

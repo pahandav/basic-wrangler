@@ -8,10 +8,10 @@ specpath = os.path.dirname(os.path.abspath(SPEC))
 block_cipher = None
 
 
-a = Analysis(['bw.py'],
+a = Analysis(['src/basicwrangler/basicwrangler.py'],
              pathex=['.'],
              binaries=[],
-             datas=[('defs/*.yaml', 'defs'), ('lex/*.yaml', 'lex'), ('icon', 'icon')],
+             datas=[('src/basicwrangler/defs/*.yaml', 'defs'), ('src/basicwrangler/lex/*.yaml', 'lex'), ('src/basicwrangler/icon', 'icon')],
              hiddenimports=['pkg_resources.py2_warn'],
              hookspath=[],
              runtime_hooks=[],
@@ -32,7 +32,7 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           console=True,
-          icon = os.path.join(specpath, 'icon', 'program_icon.ico') )
+          icon = os.path.join(specpath, 'src', 'basicwrangler', 'icon', 'program_icon.ico') )
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
