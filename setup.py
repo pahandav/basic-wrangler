@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="basic-wrangler",  # Replace with your own username
-    version="0.5.0",
+    version="0.5.1",
     author="pahandav",
     author_email="34494459+pahandav@users.noreply.github.com",
     description="A BASIC program listing line renumberer/cruncher (aka, a minifier).",

@@ -38,7 +38,7 @@ if hasattr(sys, "_MEIPASS"):
 else:
     ICON_DIR = Path.joinpath(Path(__file__).resolve().parent, "icon")
 
-VERSION = "0.5.0"
+VERSION = "0.5.1"
 TOKENIZER_NAME_CONVERSION = {
     "pet": "cbm4",
     "vic20": "cbm2",
