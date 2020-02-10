@@ -195,7 +195,9 @@ def output_basic_listing(Lexer, numbered_file, jump_targets, basic_type):
                     current_value = token.val
             labeled_file = labeled_file + current_value
             if index + 1 < tokenized_line_length:
-                if (
+                if token.type == "ID" and token.val.endswith("("):
+                    continue
+                elif (
                     not token.type == "PUNCTUATION"
                     and not tokenized_line[index + 1].type == "PUNCTUATION"
                     and not token.type == "STATEMENT"
