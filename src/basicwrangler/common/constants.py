@@ -9,9 +9,4 @@ NO_TOKENIZER = [
     "riscos",
     "amiga",
     "gsoft",
-    "cpc",
-    "adam",
-    "msx",
-    "oric",
-    "bbc",
 ]

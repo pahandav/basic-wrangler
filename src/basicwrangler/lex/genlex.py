@@ -20,7 +20,8 @@ def generate_splitter():
     yaml_path = Path.joinpath(SCRIPT_DIR, "rules.yaml")
     with open(yaml_path) as yaml_file:
         yaml_dict = yaml.safe_load(yaml_file)
-    split_string = yaml_dict["split"]
+    specific_dict = yaml_dict["label"]
+    split_string = specific_dict["split"]
     return split_string
 
 
@@ -43,7 +44,8 @@ def generate_label_lexer(basic_type):
     yaml_path = Path.joinpath(SCRIPT_DIR, "rules.yaml")
     with open(yaml_path) as yaml_file:
         yaml_dict = yaml.safe_load(yaml_file)
-    regex_dict = yaml_dict[basic_type]
+    specific_dict = yaml_dict["label"]
+    regex_dict = specific_dict[basic_type]
     rules = []
     for key in regex_dict_order:
         temp_tuple = (regex_dict[key], key)
