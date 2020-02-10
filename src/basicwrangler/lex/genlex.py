@@ -44,11 +44,11 @@ def generate_label_lexer(basic_type):
     with open(yaml_path) as yaml_file:
         yaml_dict = yaml.safe_load(yaml_file)
     regex_dict = yaml_dict[basic_type]
-    rules = list()
+    rules = []
     for key in regex_dict_order:
         temp_tuple = (regex_dict[key], key)
         rules.append(temp_tuple)
-    logging.debug(rules)
+    logging.debug("Lexer Rules: %s", rules)
     if basic_type.startswith("cbm"):
         lx = lexer.Lexer(rules, skip_whitespace=True, ignore_case=True)
     else:

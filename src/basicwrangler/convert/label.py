@@ -10,11 +10,12 @@ from basicwrangler.lex.lexer import LexerError
 
 def tokenize_line(Lexer, untokenized_line, line_no):
     """ This function returns an untokenized line as a list of tokens. """
+    logging.debug("Tokenizing line number: %s", line_no + 1)
     Lexer.input(untokenized_line)
-    token_list = list()
+    token_list = []
     try:
         for tok in Lexer.tokens():
-            logging.debug(tok)
+            logging.debug("Token: %s", tok)
             token_list.append(tok)
     except LexerError as err:
         print("LexerError at position %s in line number %s" % (err.pos, line_no + 1))
@@ -23,7 +24,8 @@ def tokenize_line(Lexer, untokenized_line, line_no):
 
 def sanity_check_listing(Lexer, numbered_file):
     """ First pass - This function returns a list of all the line numbers in the file. """
-    original_line_numbers = list()
+    logging.debug("Sanity Checking Numbered Listing.")
+    original_line_numbers = []
     for line_no, line in enumerate(numbered_file):
         tokenized_line = tokenize_line(Lexer, line, line_no)
         if tokenized_line[0].type == "LINE":
@@ -33,30 +35,31 @@ def sanity_check_listing(Lexer, numbered_file):
                 if tokenized_line[0].val in original_line_numbers:
                     # Duplicate Line sanity check
                     logging.critical(
-                        "Fatal Error! Line number "
-                        + tokenized_line[0].val
-                        + " is a duplicate!"
+                        "Fatal Error! Line number %s is a duplicate!",
+                        tokenized_line[0].val,
                     )
                     sys.exit(1)
                 if int(tokenized_line[0].val) < int(original_line_numbers[-1]):
                     # Out of order check.
                     logging.warning(
-                        "Line number " + tokenized_line[0].val + " is out of order."
+                        "Line number %s is out of order.", tokenized_line[0].val
                     )
                 original_line_numbers.append(tokenized_line[0].val)
+    logging.debug("Original Line Numbers: %s", original_line_numbers)
     return original_line_numbers
 
 
 def extract_jump_targets(Lexer, numbered_file, original_line_numbers):
     """ Second pass - This function returns a set of jump targets. """
+    logging.debug("Getting jump targets.")
     jump_targets = set()
     for line_no, line in enumerate(numbered_file):
-        handled = list()
+        handled = []
         tokenized_line = tokenize_line(Lexer, line, line_no)
         tokenized_line_length = len(tokenized_line)
         indices = [i for i, x in enumerate(tokenized_line) if x.type == "FLOW"]
-        logging.debug(line)
-        logging.debug(indices)
+        logging.debug("Current Line: %s", line)
+        logging.debug("Jump target indices: %s", indices)
         for index in indices:
             if index in handled:
                 continue
@@ -70,12 +73,11 @@ def extract_jump_targets(Lexer, numbered_file, original_line_numbers):
                     for i in range(on_start_index + 1, tokenized_line_length):
                         if tokenized_line[i].type == "NUMBER":
                             target = tokenized_line[i].val
-                            logging.debug(target)
+                            logging.debug("Jump target: %s", target)
                             if target not in original_line_numbers:
                                 logging.critical(
-                                    "Fatal Error! Attempt to jump to line number "
-                                    + target
-                                    + " is invalid!"
+                                    "Fatal Error! Attempt to jump to line number %s is invalid!",
+                                    target,
                                 )
                                 sys.exit(1)
                             jump_targets.add(target)
@@ -84,21 +86,21 @@ def extract_jump_targets(Lexer, numbered_file, original_line_numbers):
             if index + 1 < tokenized_line_length:
                 if tokenized_line[index + 1].type == "NUMBER":
                     target = tokenized_line[index + 1].val
-                    logging.debug(target)
+                    logging.debug("Jump target: %s", target)
                     if target not in original_line_numbers:
                         logging.critical(
-                            "Fatal Error! Attempt to jump to line number "
-                            + target
-                            + " is invalid!"
+                            "Fatal Error! Attempt to jump to line number %s is invalid!",
+                            target,
                         )
                         sys.exit(1)
                     jump_targets.add(target)
-    logging.debug(jump_targets)
+    logging.debug("Jump targets: %s", jump_targets)
     return jump_targets
 
 
 def output_basic_listing(Lexer, numbered_file, jump_targets, basic_type):
     """ Final pass - This function returns the labelled BASIC file. """
+    logging.debug("Converting to labeled format.")
     labeled_file = ""
     for line_no, line in enumerate(numbered_file):
         set_flow = False
@@ -109,6 +111,7 @@ def output_basic_listing(Lexer, numbered_file, jump_targets, basic_type):
             current_value = ""
             if token.type == "LINE":
                 if token.val in jump_targets:
+                    logging.debug("Jump target at line number: %s", token.val)
                     labeled_file = labeled_file + "\n" + "_" + token.val + ":" + "\n"
                     continue
                 continue

@@ -18,11 +18,12 @@ else:
 
 def abbreviate(working_file, basic_type, reverse_this=False):
     """ Returns the file with keywords abbreviated or with the abbreviations removed. """
+    logging.debug("Converting to/from abbreviated format.")
     yaml_path = Path.joinpath(SCRIPT_DIR, "abbrevs.yaml")
     with open(yaml_path) as yaml_file:
         yaml_dict = yaml.safe_load(yaml_file)
     abbrev_dict = yaml_dict[basic_type]
-    reversed_dict = dict()
+    reversed_dict = {}
     if reverse_this:
         reversed_dict = {v.replace(".", "[.]"): k for k, v in abbrev_dict.items()}
         for key in sorted(reversed_dict, key=len, reverse=True):
@@ -117,5 +118,5 @@ def set_basic_defs(basic_type, paste_format, basic_line_length, numbering, incre
         tokenize,
         data_length,
     )
-    logging.debug(basic_defs)
+    logging.debug("BASIC Definitions: %s", basic_defs)
     return basic_defs, paste_format

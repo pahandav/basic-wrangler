@@ -34,7 +34,8 @@ def reformat_data_statements(input_file, basic_defs):
         data_statement_length = basic_defs.data_length - 9
     if basic_defs.crunch != 1:
         data_statement_length += 1
-    output_file = list()
+    logging.debug("DATA Statement Reformatter Start.")
+    output_file = []
     for index, line in enumerate(input_file):
         if line.startswith("#data"):
             start_data_block = index + 1
@@ -43,10 +44,10 @@ def reformat_data_statements(input_file, basic_defs):
     for index, line in enumerate(input_file):
         if line.startswith("#enddata"):
             end_data_block = index
-    data_block = list()
+    data_block = []
     for index in range(start_data_block, end_data_block):
         data_block.append(input_file[index])
-    logging.debug(data_block)
+    logging.debug("DATA Block: %s", data_block)
     if basic_defs.crunch == 1:
         data_statement_start = "DATA"
     else:
@@ -60,10 +61,10 @@ def reformat_data_statements(input_file, basic_defs):
             data_statement = data_statement.rstrip(",")
             output_file.append(data_statement)
             data_statement = data_statement_start + line + ","
-            logging.debug(data_statement)
-        logging.debug(data_statement)
+            logging.debug("DATA Statement: %s", data_statement)
+        logging.debug("DATA Statement: %s", data_statement)
     data_statement = data_statement.rstrip(",")
-    logging.debug(data_statement)
+    logging.debug("DATA Statement: %s", data_statement)
     output_file.append(data_statement)
     output_file = list(filter(None, output_file))
     return output_file

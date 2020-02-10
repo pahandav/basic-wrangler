@@ -98,7 +98,7 @@ def renum(args):
     working_file = renumber.renumber_basic_file(
         working_file, basic_defs, label_dict, line_replacement, basic_type
     )
-    logging.debug(label_dict)
+    logging.debug("Labels and Computed Line Numbers: %s", label_dict)
 
     # replace labels with line numbers
     for key in sorted(label_dict, key=len, reverse=True):
@@ -163,7 +163,7 @@ def renum(args):
 
     # output to console that the file has been saved
     if not paste_format or user_filename:
-        print(input_filename + " has been saved as " + output_filename)
+        print(f"{input_filename} has been saved as {output_filename}")
 
 
 def convert(args):
@@ -194,7 +194,7 @@ def convert(args):
             working_file[index] = re.sub("GO SUB" + RE_QUOTES, "GOSUB", line)
     if args.split:
         split_string = generate_splitter()
-        new_file = list()
+        new_file = []
         if basic_type.startswith("cbm"):
             splitter = re.compile("(" + split_string + r"|\".*?\")", re.IGNORECASE)
         else:
@@ -223,7 +223,7 @@ def convert(args):
         output_filename = temp_filename
     with open(output_filename, "w") as file:
         file.write(final_file)
-    print(input_filename + " has been saved as " + output_filename)
+    print(f"{input_filename} has been saved as {output_filename}")
 
 
 @Gooey(
