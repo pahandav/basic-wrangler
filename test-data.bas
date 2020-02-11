@@ -2,7 +2,7 @@
 ' This code will not run properly, so don't even think of running it.
 
 ' RANDOMIZATION ROUTINE
-PRINT "80-COLUMNS?"
+PRINT "80-Columns?"
 
 _3: ' INKEY$ Loop
 
@@ -55,7 +55,7 @@ PRINT
 
 _350: ' Beginning of battle.
 
-PRINT "TWO SOLDIERS APPROACH."
+PRINT "Two soldiers approach."
 PRINT
 
 _370:
@@ -67,7 +67,7 @@ T=Z
 GOTO _1190
 _420:
 ' ITERATE ATTACKER
-IF A(Z)=Z THEN _2410
+IF A(Z)=Z THEN game_over
 A=A+Y
 IF A<>Z THEN T=Z
 IF A(V*A)=Z THEN A=A+Y
@@ -79,7 +79,7 @@ IF D=X THEN _530
 GOTO _370
 _530:
 ' NEW GAME
-PRINT "YOU ARE VICTORIOUS."
+PRINT "You are victorious."
 PRINT
 W=W+Y
 A=Z
@@ -89,7 +89,7 @@ FOR I=Y TO X
 	A(I*V)=A(I*V+Y)
 NEXT I
 GOSUB _2090
-IF R<12.5 THEN PRINT "YOU OBTAINED A POTION!"
+IF R<12.5 THEN PRINT "You obtained a Potion!"
 IF R<12.5 THEN PRINT
 IF R<12.5 THEN P=P+Y
 IF P>O THEN P=O
@@ -101,7 +101,7 @@ IF R>=25 THEN RETURN
 FOR I=V TO M-Y
     A(I)=A(I)*1.5
 NEXT I
-PRINT "THE ENEMIES HAVE POWERED UP!"
+PRINT "The enemies have powered up!"
 PRINT
 RETURN
 
@@ -112,10 +112,10 @@ PRINT
 PRINT A(Z);"/";A(Y);"HP"
 PRINT A(X);"/";A(3);"MP"
 PRINT
-PRINT "(1) ATTACK"
-PRINT "(2) MAGIC"
-PRINT "(3) ITEMS"
-PRINT "(0) QUIT"
+PRINT "(1) Attack"
+PRINT "(2) Magic"
+PRINT "(3) Items"
+PRINT "(0) Quit"
 
 _870:
 
@@ -182,7 +182,7 @@ E=A(A*V+12)
 C=D+((D+E)/L)*((D*E)/L)
 D=((U*(K-A(T*V+Q)))*C)/(U*K)
 C=(A(A*V+11)+A(A*V+12)-A(T*V+12))/H
-GOSUB _2300
+GOSUB random65535
 IF R<=C THEN _1420
 GOTO _1440
 _1420:
@@ -203,7 +203,7 @@ PRINT
 _1550:
 GOTO _420
 _1560:
-IF D>Z THEN GOSUB _2330
+IF D>Z THEN GOSUB ding_routine
 PRINT "SOLDIER";A;"HIT YOU FOR";D;"HP."
 PRINT
 IF A(Z)<>Z THEN _1620
@@ -223,7 +223,7 @@ IF C>X THEN _1630
 IF C<Z THEN _1630
 C=A(M+X)+A(A*V+12)-((A(T*V+12))/X)-Y
 GOSUB _2090
-IF R<C THEN GOSUB _2380
+IF R<C THEN GOSUB Magic_Damage
 IF R>C THEN _1770
 D=(A(M+Y)*(K-A(T*V+9))*C)/(U*K)
 _1770:
@@ -241,7 +241,7 @@ _1850:
 E=3
 IF A(M+3)>A(X) THEN _1810
 A(X)=A(X)-A(M+3)
-GOSUB _2380
+GOSUB Magic_Damage
 D=C+22*A(M+Y+E)
 D=INT(D*(S+(RND(Y)*N))/B)
 PRINT
@@ -289,27 +289,27 @@ _2270:
     ' LUCKY HIT ROUTINE
 D=I/H
 RETURN
-_2300:
+random65535:
 ' RANDOM 65535 ROUTINE
 R=((RND(Y)*F)*O/F)+Y
 RETURN
-_2330:
+ding_routine:
 	' DING ROUTINE
 FOR J=Z TO G
 NEXT J
 PRINT CHR$(7)
 RETURN
-_2380:
+Magic_Damage:
 ' MAGIC DAMAGE ROUTINE
 C=Q*(A(8)+A(12))
 RETURN
-_2410:
+game_over:
 ' GAME OVER ROUTINE
 PRINT
 PRINT "GAME OVER"
 PRINT
 FOR I=Z TO Y
-	GOSUB _2330
+	GOSUB ding_routine
 NEXT I
 _2480:
 PRINT

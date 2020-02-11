@@ -10,3 +10,4 @@ NO_TOKENIZER = [
     "amiga",
     "gsoft",
 ]
+CBM_BASIC = ["pet", "vic20", "c64", "plus4", "c128"]

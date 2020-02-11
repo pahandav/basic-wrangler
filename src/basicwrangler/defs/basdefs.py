@@ -11,7 +11,7 @@ from basicwrangler.common.constants import NO_TOKENIZER, RE_QUOTES
 
 # This is needed to find files when running with pyinstaller.
 if hasattr(sys, "_MEIPASS"):
-    SCRIPT_DIR = Path.joinpath(Path(sys._MEIPASS).resolve(), "defs")  # type: ignore # pylint: disable=no-member
+    SCRIPT_DIR = Path.joinpath(Path(sys._MEIPASS).resolve(), "defs")  # type: ignore # pylint: disable=no-member,protected-access
 else:
     SCRIPT_DIR = Path(__file__).resolve().parent
 
@@ -65,6 +65,7 @@ def set_basic_defs(basic_type, paste_format, basic_line_length, numbering, incre
             "abbreviate",
             "tokenize",
             "data_length",
+            "paste_format",
         ],
     )
     yaml_path = Path.joinpath(SCRIPT_DIR, "basdefs.yaml")
@@ -117,6 +118,7 @@ def set_basic_defs(basic_type, paste_format, basic_line_length, numbering, incre
         abbreviate,
         tokenize,
         data_length,
+        paste_format,
     )
     logging.debug("BASIC Definitions: %s", basic_defs)
     return basic_defs, paste_format

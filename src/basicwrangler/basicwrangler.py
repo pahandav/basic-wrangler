@@ -19,7 +19,7 @@ import basicwrangler.renum.renumber as renumber
 
 # constants
 from basicwrangler.common.constants import RE_QUOTES
-from basicwrangler.lex.genlex import generate_splitter
+from basicwrangler.lex.genlex import generate_lexer, generate_splitter
 
 # This is needed to make the GUI version work on Windows.
 if os.name == "nt":
@@ -34,7 +34,7 @@ if len(sys.argv) >= 2:
 
 # This is needed to find files when running with pyinstaller.
 if hasattr(sys, "_MEIPASS"):
-    ICON_DIR = Path.joinpath(Path(sys._MEIPASS).resolve(), "icon")  # type: ignore # pylint: disable=no-member
+    ICON_DIR = Path.joinpath(Path(sys._MEIPASS).resolve(), "icon")  # type: ignore # pylint: disable=no-member,protected-access
 else:
     ICON_DIR = Path.joinpath(Path(__file__).resolve().parent, "icon")
 
@@ -47,7 +47,6 @@ TOKENIZER_NAME_CONVERSION = {
     "c128": "cbm7",
     "trs80m4": "trs80l2",
 }
-CBM_BASIC = ["pet", "vic20", "c64", "plus4", "c128"]
 
 
 def renum(args):
@@ -80,30 +79,32 @@ def renum(args):
         if line.startswith("#data"):
             working_file = functions.reformat_data_statements(working_file, basic_defs)
 
-    # create a dictionary containing all the jump target labels
-    label_dict, line_replacement = renumber.populate_label_data(working_file)
+    # Generate a tokenizer
+    if basic_type in TOKENIZER_NAME_CONVERSION:
+        lexer_basic_type = TOKENIZER_NAME_CONVERSION[basic_type]
+    else:
+        lexer_basic_type = basic_type
+    Lexer = generate_lexer(lexer_basic_type, renum=True)
 
-    # ZX Spectrum laziness feature - replace GOTO and GOSUB with GO TO and GO SUB
+    # create a dictionary containing all the jump target labels
+    label_dict, line_replacement = renumber.populate_label_data(Lexer, working_file)
+
+    """ # ZX Spectrum laziness feature - replace GOTO and GOSUB with GO TO and GO SUB
     if basic_type == "zxspectrum":
         for index, line in enumerate(working_file):
             working_file[index] = re.sub("GOTO" + RE_QUOTES, "GO TO", line)
         for index, line in enumerate(working_file):
-            working_file[index] = re.sub("GOSUB" + RE_QUOTES, "GO SUB", line)
+            working_file[index] = re.sub("GOSUB" + RE_QUOTES, "GO SUB", line) """
+
+    # renumber the BASIC file
+    working_file = renumber.renumber_basic_file(
+        Lexer, working_file, basic_defs, label_dict, line_replacement, basic_type
+    )
+    logging.debug("Labels and Computed Line Numbers: %s", label_dict)
 
     # abbreviate statements if needed
     if basic_defs.abbreviate:
         working_file = basdefs.abbreviate(working_file, basic_type)
-
-    # renumber the BASIC file
-    working_file = renumber.renumber_basic_file(
-        working_file, basic_defs, label_dict, line_replacement, basic_type
-    )
-    logging.debug("Labels and Computed Line Numbers: %s", label_dict)
-
-    # replace labels with line numbers
-    for key in sorted(label_dict, key=len, reverse=True):
-        for index, line in enumerate(working_file):
-            working_file[index] = re.sub(key + RE_QUOTES, str(label_dict[key]), line)
 
     # add newlines back in to the file
     atascii_file = None
@@ -120,9 +121,7 @@ def renum(args):
         final_file = "POKE 82,0\n" + final_file
 
     # adjust case if needed when pasting
-    if basic_type in CBM_BASIC:
-        final_file = final_file.lower()
-    elif paste_format and basic_defs.case == "lower":
+    if paste_format and basic_defs.case == "lower":
         final_file = final_file.lower()
     elif paste_format and basic_defs.case == "invert":
         final_file = final_file.swapcase()

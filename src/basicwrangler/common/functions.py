@@ -4,6 +4,21 @@ import logging
 import re
 
 from basicwrangler.common.constants import RE_QUOTES
+from basicwrangler.lex.lexer import LexerError
+
+
+def tokenize_line(Lexer, untokenized_line, line_no):
+    """ This function returns an untokenized line as a list of tokens. """
+    logging.debug("Tokenizing line number: %s", line_no + 1)
+    Lexer.input(untokenized_line)
+    token_list = []
+    try:
+        for tok in Lexer.tokens():
+            logging.debug("Token: %s", tok)
+            token_list.append(tok)
+    except LexerError as err:
+        print("LexerError at position %s in line number %s" % (err.pos, line_no + 1))
+    return token_list
 
 
 def strip_file(unstripped):
@@ -17,10 +32,7 @@ def remove_comments(commented):
     """ This will remove comments from the file. """
     # strip comments
     uncommented = [
-        a.rstrip(":")
-        for a in [
-            b.rstrip() for b in [re.sub(RE_QUOTES + r"'.*?$", "", c) for c in commented]
-        ]
+        b.rstrip() for b in [re.sub(RE_QUOTES + r"'.*?$", "", c) for c in commented]
     ]
     uncommented = list(filter(None, uncommented))
     return uncommented
