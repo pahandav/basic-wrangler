@@ -25,9 +25,9 @@ LABEL_RULES = [
 RENUM_RULES = [
     "LABEL",
     "LINE",
+    "PRINT",
     "KEYWORDS",
     "FLOW",
-    "PRINT",
     "THEN",
     "NUMBER",
     "COMMENT",

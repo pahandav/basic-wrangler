@@ -18,7 +18,7 @@ import basicwrangler.defs.basdefs as basdefs
 import basicwrangler.renum.renumber as renumber
 
 # constants
-from basicwrangler.common.constants import RE_QUOTES
+from basicwrangler.common.constants import NO_TOKENIZER, RE_QUOTES
 from basicwrangler.lex.genlex import generate_lexer, generate_splitter
 
 # This is needed to make the GUI version work on Windows.
@@ -82,6 +82,8 @@ def renum(args):
     # Generate a tokenizer
     if basic_type in TOKENIZER_NAME_CONVERSION:
         lexer_basic_type = TOKENIZER_NAME_CONVERSION[basic_type]
+    elif basic_type in NO_TOKENIZER:
+        lexer_basic_type = "generic"
     else:
         lexer_basic_type = basic_type
     Lexer = generate_lexer(lexer_basic_type, renum=True)
