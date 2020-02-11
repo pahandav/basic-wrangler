@@ -91,13 +91,6 @@ def renum(args):
     # create a dictionary containing all the jump target labels
     label_dict, line_replacement = renumber.populate_label_data(Lexer, working_file)
 
-    """ # ZX Spectrum laziness feature - replace GOTO and GOSUB with GO TO and GO SUB
-    if basic_type == "zxspectrum":
-        for index, line in enumerate(working_file):
-            working_file[index] = re.sub("GOTO" + RE_QUOTES, "GO TO", line)
-        for index, line in enumerate(working_file):
-            working_file[index] = re.sub("GOSUB" + RE_QUOTES, "GO SUB", line) """
-
     # renumber the BASIC file
     working_file = renumber.renumber_basic_file(
         Lexer, working_file, basic_defs, label_dict, line_replacement, basic_type

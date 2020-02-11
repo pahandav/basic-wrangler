@@ -43,30 +43,6 @@ def populate_label_data(Lexer, working_file):
     return label_dict, line_replacement
 
 
-def fix_spacing(line):
-    """ Removes spaces where they are not needed. """
-    error_list = [('"', ";"), (";", '"'), ("<>", '"'), ("=", '"')]
-    adjust_length = 0
-    # remove spaces between one thing and another using the list of tuples above
-    for index, _ in enumerate(error_list):
-        for x in range(len(line) - 1, -1, -1):
-            if line[x - 1].endswith(error_list[index][0]) and line[x].startswith(
-                error_list[index][1]
-            ):
-                line[x - 1] = line[x - 1] + line[x]
-                line.pop(x)
-                adjust_length += 1
-    # remove spaces between comma joined elements
-    for x in range(len(line) - 1, -1, -1):
-        if line[x] == ",":
-            line[x - 1] = line[x - 1] + line[x] + line[x + 1]
-            line.pop(x + 1)
-            line.pop(x)
-            adjust_length += 2
-    logging.debug("Line adjustment is: %s", adjust_length)
-    return line, adjust_length
-
-
 def check_new_line(line):
     """ Checks to see if a new line is mandatory. """
     need_new_line = False
@@ -81,37 +57,6 @@ def check_new_line(line):
     if any(token.type == 'COMMENT' for token in line):
         need_new_line = True """
     return need_new_line
-
-
-def determine_line_length(line, basic_defs, line_replacement):
-    """ Algorithmically determine the length of a line. """
-    current_line_length = 0
-    for element in line:
-        if element.startswith("`"):
-            current_line_length = current_line_length + line_replacement
-        elif element == "PRINT" and basic_defs.print_as_question:
-            current_line_length += 1
-        else:
-            current_line_length = current_line_length + len(element)
-    if basic_defs.crunch == 0:
-        for element in line:
-            current_line_length += 1
-    return current_line_length
-
-
-# def crunch_line(line, basic_defs):
-#    """ This function crunches lines.
-#
-#    If crunch is 0, it will join with spaces, and if crunch is 1 it will join with no spaces. """
-#    if not basic_defs.tokenize:
-#        while basic_defs.print_as_question and "PRINT" in line:
-#            print_index = line.index("PRINT")
-#            line[print_index] = "?"
-#    if basic_defs.crunch == 1:
-#        final_line = "".join(line)
-#    else:
-#        final_line = " ".join(line)
-#    return final_line
 
 
 def crunch_line(tokenized_line, label_dict, line_replacement, line_no, basic_defs):
@@ -256,16 +201,6 @@ def crunch_line(tokenized_line, label_dict, line_replacement, line_no, basic_def
                     current_buffer = current_buffer + " "
                     current_line_length += 1
     return current_line_length, current_buffer
-
-
-# def tokenize_line(line):
-#    """ A super-naive line lexer.
-#
-#    This splits a string on spaces, quotes, and commas to create a list of tokens.
-#    TODO: replace this with a better lexer at some point. """
-#    temp1 = re.split(r"(REM.*$|DATA.*$|D\..*$|\s|\".*?\"|,)", line)
-#    temp2 = [x for x in temp1 if x.strip()]
-#    return temp2
 
 
 def start_new_line(current_line_number):

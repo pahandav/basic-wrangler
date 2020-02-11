@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.0 - 2020-02-11
+
+- Added Amstrad CPC, BBC Micro, Coleco ADAM, MSX, and Oric BASIC tokenizer rules.
+- Updated the renumbering routine with a tokenizer. Labels no longer have to start with an underscore.
+- Better Sinclair BASIC laziness features.
+- Automatic LET and GOTO after THEN insertion for Sinclair BASIC.
+- Conversely, it will no longer output LET or GOTO after THEN for other BASIC dialects in order to save space.
+
 ## 0.5.1 - 2020-02-05
 
 - There's been a bunch of internal changes due to converting this to be installable by pip from PyPI. It should still work **_exactly_** the same, but some bugs might have slipped through.
