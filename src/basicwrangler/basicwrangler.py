@@ -125,6 +125,15 @@ def renum(args):
         final_file = final_file.lower()
     elif paste_format and basic_defs.case == "invert":
         final_file = final_file.swapcase()
+    elif basic_type == "zx81":
+        # Set ZX81 output to uppercase and replace invalid characters.
+        final_file = final_file.upper()
+        final_file = final_file.replace("!", ".")
+        final_file = final_file.replace("#", " ")
+        final_file = final_file.replace("%", " ")
+        final_file = final_file.replace("^", " ")
+        final_file = final_file.replace("&", " ")
+        final_file = final_file.replace("'", ",")
 
     # set the final filename
     if user_filename:

@@ -7,6 +7,8 @@ import sys
 from basicwrangler.common.constants import CBM_BASIC, RE_QUOTES
 from basicwrangler.common.functions import tokenize_line
 
+SINCLAIR_BASIC = ["zx81", "zxspectrum"]
+
 
 def populate_label_data(Lexer, working_file):
     """ This function populates a dictionary with labels and determines
@@ -132,6 +134,57 @@ def crunch_line(tokenized_line, label_dict, line_replacement, line_no, basic_def
             # Correct line length for labels.
             current_value = token.val
             current_line_length += line_replacement
+        elif basic_defs.basic_type in SINCLAIR_BASIC:
+            # Sinclair BASIC laziness features.
+            # Insert LET before assignment at beginning of statement.
+            if (
+                index == 0
+                and index + 1 < tokenized_line_length
+                and token.type == "ID"
+                and token.val not in label_dict
+                and any(token.val == "=" for token in tokenized_line)
+            ):
+                current_value = "LET " + token.val
+            # Insert LET if assignment is after THEN.
+            elif (
+                token.type == "THEN"
+                and tokenized_line[index + 1].type == "ID"
+                and tokenized_line[index + 1].val not in label_dict
+                and any(token.val == "=" for token in tokenized_line[index:])
+            ):
+                current_value = "THEN LET"
+            # Insert GOTO after THEN.
+            elif (
+                token.type == "THEN"
+                and tokenized_line[index + 1].type == "ID"
+                and tokenized_line[index + 1].val in label_dict
+            ):
+                if basic_defs.basic_type == "zxspectrum":
+                    current_value = "THEN GO TO"
+                else:
+                    current_value = "THEN GOTO"
+            # Fix spacing for ZX Spectrum.
+            elif token.val == "GOTO":
+                if basic_defs.basic_type == "zxspectrum":
+                    current_value = "GO TO"
+                else:
+                    current_value = "GOTO"
+            elif token.val == "GOSUB":
+                if basic_defs.basic_type == "zxspectrum":
+                    current_value = "GO SUB"
+                else:
+                    current_value = "GOSUB"
+            else:
+                current_value = token.val
+                current_line_length += len(token.val)
+        elif token.type == "LET":
+            continue
+        elif (
+            token.val == "GOTO"
+            and index > 0
+            and tokenized_line[index - 1].val == "THEN"
+        ):
+            continue
         elif basic_defs.basic_type in CBM_BASIC:
             # Format into upper-case correctly for CBM BASIC
             if token.type == "COMMENT" and token.val.isupper():
