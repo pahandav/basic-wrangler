@@ -6,8 +6,5 @@ NO_TOKENIZER = [
     "freebasic",
     "qbasic",
     "gwbasic",
-    "riscos",
-    "amiga",
-    "gsoft",
 ]
 CBM_BASIC = ["pet", "vic20", "c64", "plus4", "c128"]
