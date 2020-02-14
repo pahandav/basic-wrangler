@@ -156,6 +156,7 @@ def renum(args):
     # write or paste the renumbered file
     if paste_format:
         pyperclip.copy(final_file)
+        print(f"{input_filename} has been pasted to the clipboard.")
     if not paste_format or user_filename:
         if atascii_file:
             with open(output_filename, "wb") as file:
