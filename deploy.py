@@ -211,7 +211,7 @@ time.sleep(3)
 print("")
 # Builds the installer for the Windows version. Requires Inno Setup to be in your system path.
 subprocess.call(
-    ["iscc", f"/dMyAppVersion={new_version}" r"inno\installer.iss"], shell=True
+    ["iscc", f"/dMyAppVersion={new_version}", r"inno\installer.iss"], shell=True
 )
 
 print("")
