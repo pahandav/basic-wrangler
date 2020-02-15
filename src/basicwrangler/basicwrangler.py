@@ -217,9 +217,14 @@ def convert(args):
     if not args.c64_list:
         external_data_filename = input_filename.with_suffix(".lbl")
         if not external_data_filename.exists():
-            working_file, jump_list = label.label_listing(
-                working_file, basic_type, extract=True
-            )
+            if args.labeled:
+                working_file, jump_list = label.label_listing(
+                    working_file, basic_type, extract=True, labeled=True
+                )
+            else:
+                working_file, jump_list = label.label_listing(
+                    working_file, basic_type, extract=True
+                )
             external_data_file = "\n".join(jump_list)
             with open(external_data_filename, "w") as file:
                 file.write(external_data_file)
@@ -229,9 +234,14 @@ def convert(args):
                 external_file = file.read()
             split_external_file = external_file.splitlines()
             external_dict = functions.create_external_file_dict(split_external_file)
-            working_file, jump_list = label.label_listing(
-                working_file, basic_type, external_dict=external_dict
-            )
+            if args.labeled:
+                working_file, jump_list = label.label_listing(
+                    working_file, basic_type, external_dict=external_dict, labeled=True
+                )
+            else:
+                working_file, jump_list = label.label_listing(
+                    working_file, basic_type, external_dict=external_dict
+                )
     if args.c64_list:
         working_file = helpers.c64_list(working_file)
     if args.data_formatter:
@@ -382,6 +392,13 @@ def main():
         dest="output_filename",
         help="Set the output filename.",
         widget="FileSaver",
+    )
+    parser_convert.add_argument(
+        "-l",
+        "--labeled",
+        action="store_true",
+        default=False,
+        help="Process a BASIC Wrangler format listing.",
     )
     parser_convert.set_defaults(func=convert)
     args = parser.parse_args()

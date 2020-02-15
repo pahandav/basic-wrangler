@@ -1,6 +1,6 @@
 label:
   adam:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -13,7 +13,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   alt4k:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -26,7 +26,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   alt8k:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -39,7 +39,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   altdisk:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -52,7 +52,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   altext:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -65,7 +65,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   amiga:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -78,7 +78,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   apple2:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -91,7 +91,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   apple3:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -104,7 +104,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   atari:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -117,7 +117,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   bascom:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -130,7 +130,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   bbc:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -143,7 +143,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   cbm2:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -156,7 +156,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   cbm35:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -169,7 +169,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   cbm4:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -182,7 +182,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   cbm7:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -195,7 +195,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   coco:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -208,7 +208,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   cpc:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -221,7 +221,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   cpm4:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -234,7 +234,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   cpm5:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -247,7 +247,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   generic:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -260,7 +260,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   gsoft:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -273,7 +273,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   msx:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -286,7 +286,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   oric:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -299,7 +299,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   riscos:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -313,7 +313,7 @@ label:
     STRING: '".*?"'
   split: UNLOADLIBRARY|LOADLIBRARY|SETHEADING|COLLISION|DELSPRITE|MOUSETEXT|RANDOMIZE|RECTANGLE|TOOLERROR|TRANSLATE|TURNRIGHT|ALLOCATE|AREAFILL|ARGCOUNT|BEVELBOX|CLOSEOUT|DISTANCE|ENDWHILE|ENVELOPE|EXTERNAL|FUNCTION|GRAPHICS|INPUTBOX|INTERVAL|MAXFILES|POSITION|RSPCOLOR|SETCOLOR|SHORTINT|SPRCOLOR|TURNLEFT|ADDRESS|CATALOG|CHARPAT|CHARSET|CLOSEIN|CONSOLE|DECLARE|DEFREAL|DISPLAY|DISPOSE|ELLIPSE|ENDCASE|ENDPROC|EXPLODE|FILEBOX|FORWARD|GRAPHIC|HCIRCLE|HEADING|HSCREEN|INSTALL|INVERSE|LIBRARY|LONGINT|MAGNIFY|MESSAGE|NOTRACE|OPENOUT|OVERLAY|PALETTE|PATTERN|PCMPLAY|PENDOWN|PERFORM|POINTER|PRIVATE|RELEASE|RESTORE|RSPRITE|RWINDOW|SCRATCH|SUBEXIT|UNBREAK|UNTRACE|VERSION|WARNING|ACCEPT|ADJUST|APPEND|BACKUP|BORDER|BRIGHT|BUTTON|CIRCLE|CLOADM|COLOR=|COLOUR|COMMON|CONCAT|CREATE|CSAVEM|CSRLIN|CURDIR|CURMOV|CURSET|DCLEAR|DCLOSE|DEFDBL|DEFINT|DEFLNG|DEFSNG|DEFSTR|DEFUSR|DELETE|DRAWTO|FILTER|FORMAT|GADGET|GETKEY|GLOBAL|GSHAPE|HANDLE|HCOLOR|HIMEM:|HPAINT|HPOINT|HPRINT|HRESET|INVOKE|JOYSTK|LINPUT|LOCATE|LOMEM:|LPRINT|MANDEL|MEMORY|MOTION|MOVSPR|MSGBOX|NORMAL|NUMBER|OPENIN|OPENUP|OPTION|ORIGIN|OUTPUT|PADDLE|PCLEAR|PCMREC|PPOINT|PRESET|PRINT@|PRINTS|RANDOM|RECALL|RECORD|REMAIN|RENAME|REPEAT|RETURN|RSPPOS|SCNCLR|SCREEN|SCROLL|SELECT|SERIAL|SETMEM|SHARED|SHLOAD|SINGLE|SIZEOF|SPRDEF|SPRITE|SPRSAV|SSHAPE|STATUS|STEREO|STRING|STRUCT|SUBEND|SUMLEN|SYMBOL|SYSTEM|TAGOFF|UNLOAD|UNLOCK|UNPLOT|VARPTR|VERIFY|VOICES|WINDOW|ADVAL|AFTER|ALLOC|ASSEM|AUDIO|BEATS|BEGIN|BLOAD|BLOCK|BREAK|BSAVE|CHAIN|CHDIR|CLEAR|CLOAD|CLOSE|COINC|COLOR|CONST|CONV%|CONV&|COUNT|CREAL|CSAVE|DLOAD|DOPEN|DRAWR|DRIVE|DSAVE|ENDIF|ENTER|ERASE|ERROR|EVERY|EXFN%|FALSE|FETCH|FIELD|FILES|FLASH|GCHAR|GOSUB|HBUFF|HCHAR|HDRAW|HIMEM|HIRES|HLINE|HPLOT|HSTAT|IMAGE|INKEY|INPUT|INSTR|JOYST|KANJI|LISTO|LLIST|LOADM|LOCAL|LOG10|LOMEM|LORES|LOWER|LPEEK|LPOKE|MERGE|MKDIR|MOTOR|MOUNT|MOUSE|MOVER|MUSIC|ONERR|OSCLI|PAINT|PAPER|PAUSE|PCOPY|PEEKL|PEEKW|PENUP|PLOTR|PMODE|POINT|POKEL|POKEW|PRINT|PTRIG|PUDEF|RESET|RIGHT|RMDIR|ROUND|SAVEM|SCALE|SETXY|SHOOT|SKIPF|SLEEP|SOUND|SPACE|SPEED|SPGET|STASH|STICK|STORE|STRIG|STYLE|TEMPO|TESTR|TIMER|TRACE|TROFF|UCASE|UNTIL|UPPER|USING|VCHAR|VIDEO|VOICE|VPEEK|VPOKE|WHILE|WIDTH|WRITE|XDRAW|AREA|ATTR|BACK|BANK|BASE|BEAT|BEEP|BEND|BGET|BPUT|BUMP|CALL|CASE|CDBL|CHAR|CINT|CLNG|CLOG|CODE|CONT|CONV|COPY|CSNG|CSTR|DATA|DATE|DEEK|DOKE|DRAW|DSKF|DSKI|DSKO|ELSE|EVAL|EXEC|EXFN|EXIT|FAST|FILL|FONT|FPOS|FREE|GCOL|GOTO|GRAB|HCLS|HGET|HGR2|HLIN|HOME|HPOS|HPUT|HSET|HTAB|INIT|KILL|LEFT|LINE|LINK|LIST|LOAD|LOCK|LOOP|LPOS|LSET|MENU|MODE|MOVE|NAME|NEXT|NOTE|NULL|OPEN|OVER|PAGE|PCLS|PEEK|PING|PLAY|PLOT|POKE|POTX|POTY|PSET|PTAB|PULL|RAND|RCLR|RDOT|READ|RLUM|RREG|RSET|SADD|SAVE|SCRN|SEEK|SIZE|SLOW|STEP|STOP|SWAP|TEST|TEXT|THEN|TIME|TINT|TRAP|TRON|TRUE|TURN|TYPE|VLIN|VPOS|VTAB|WAIT|WAVE|WEND|XCOR|XPOS|YCOR|YPOS|ZONE|ABS|ACS|ADR|AND|ARG|ASC|ASN|ATN|BIN|BOX|BYE|CAT|CHR|CLG|CLR|CLS|CMD|COS|CVD|CVI|CVN|CVS|DAY|DBL|DEC|DEF|DEG|DIM|DIR|DIV|DOS|END|ENT|ENV|EOF|EOR|EQV|ERL|ERR|EXP|EXT|FIX|FOR|FRE|GET|HEX|HGR|IFF|IMP|INK|INP|INT|JOY|KBD|KEY|LEN|LET|LOC|LOF|LOG|MAX|MEM|MID|MIN|MKD|MKI|MKN|MKS|MOD|NEW|NIL|NOT|OCT|OFF|OLD|OPT|OUT|PAD|PDL|PEN|POP|POS|POT|PTR|PUT|RAD|REC|REM|RGR|RND|ROT|RPT|RUN|SAY|SEG|SET|SGN|SHL|SHR|SIN|SNG|SPC|SQR|STR|SUB|SUM|SYS|TAB|TAG|TAN|TEN|TOP|TYP|UNT|USR|VAL|VDP|VDU|VOL|XIO|XOR|ZAP|AS|AT|DI|DO|DS|EI|FN|GR|IF|IN|LN|ON|OR|PI|PR|SQ|ST|TI|TO
   ti99:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -326,7 +326,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   ti99xb:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -339,7 +339,7 @@ label:
     STATEMENT: '::'
     STRING: '".*?"'
   trs80l1:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -352,7 +352,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   trs80l2:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -365,7 +365,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   zx81:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -378,7 +378,7 @@ label:
     STATEMENT: ':'
     STRING: '".*?"'
   zxspectrum:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: RESTORE|RESUME|RETURN|GOSUB|GOTO|THEN|ELSE|RUN|ERL|ON
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -392,7 +392,7 @@ label:
     STRING: '".*?"'
 renum:
   adam:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -407,7 +407,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   alt4k:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -422,7 +422,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   alt8k:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -437,7 +437,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   altdisk:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -452,7 +452,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   altext:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -467,7 +467,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   amiga:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -482,7 +482,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   apple2:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -497,7 +497,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   apple3:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -512,7 +512,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   atari:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -527,7 +527,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   bascom:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -542,7 +542,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   bbc:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -557,7 +557,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   cbm2:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -572,7 +572,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   cbm35:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -587,7 +587,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   cbm4:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -602,7 +602,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   cbm7:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -617,7 +617,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   coco:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -632,7 +632,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   cpc:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -647,7 +647,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   cpm4:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -662,7 +662,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   cpm5:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -677,7 +677,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   generic:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -692,7 +692,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   gsoft:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -707,7 +707,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   msx:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -722,7 +722,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   oric:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -737,7 +737,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   riscos:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -752,7 +752,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   ti99:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -767,7 +767,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   ti99xb:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -782,7 +782,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   trs80l1:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -797,7 +797,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   trs80l2:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -812,7 +812,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   zx81:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'
@@ -827,7 +827,7 @@ renum:
     STRING: '".*?"'
     THEN: THEN
   zxspectrum:
-    COMMENT: REM.*$
+    COMMENT: REM.*$|\'.*$
     DATA: DATA.*$
     FLOW: IF|RETURN|GOTO
     ID: '[a-zA-Z_]\w*[$%]?[(]?'

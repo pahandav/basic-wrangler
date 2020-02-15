@@ -26,6 +26,7 @@ def strip_file(unstripped):
     """ Strip newlines and whitespace. """
     # strip whitespace
     stripped = [line.strip() for line in unstripped]
+    stripped = list(filter(None, stripped))
     return stripped
 
 

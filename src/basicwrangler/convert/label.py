@@ -5,8 +5,9 @@ import sys
 
 from loguru import logger
 
-from basicwrangler.common.functions import tokenize_line
+from basicwrangler.common.functions import strip_file, tokenize_line
 from basicwrangler.lex.genlex import generate_lexer
+from basicwrangler.renum.renumber import populate_label_data
 
 
 def sanity_check_listing(Lexer, numbered_file):
@@ -234,23 +235,78 @@ def output_basic_listing(
     return labeled_file
 
 
-def label_listing(numbered_file, basic_type, *, extract=False, external_dict=None):
+def replace_in_labeled_file(Lexer, labeled_file, *, external_dict={}):
+    """ Returns a labeled file with stuff replaced. """
+    logger.debug("Replacing label names.")
+    final_file = ""
+    for line_no, line in enumerate(labeled_file):
+        tokenized_line = tokenize_line(Lexer, line, line_no)
+        tokenized_line_length = len(tokenized_line)
+        for index, token in enumerate(tokenized_line):
+            if token.type == "LABEL":
+                label_val = token.val.rstrip(":")
+                if label_val in external_dict:
+                    current_value = "\n" + external_dict[label_val] + ":" + "\n"
+                else:
+                    current_value = "\n" + token.val + "\n"
+            elif token.val in external_dict:
+                current_value = external_dict[token.val]
+            else:
+                current_value = token.val
+            final_file = final_file + current_value
+            if index + 1 < tokenized_line_length:
+                # Insert spaces.
+                if token.type == "ID" and token.val.endswith("("):
+                    continue
+                if (
+                    not token.type == "PUNCTUATION"
+                    and not tokenized_line[index + 1].type == "PUNCTUATION"
+                    and not token.type == "STATEMENT"
+                ):
+                    final_file = final_file + " "
+                # The following elif is not redundant. It fixes formatting errors.
+                elif (
+                    tokenized_line[index + 1].type == "FLOW"
+                    and not token.type == "STATEMENT"
+                ):
+                    final_file = final_file + " "
+        final_file = final_file + "\n"
+    return final_file
+
+
+def label_listing(
+    numbered_file, basic_type, *, extract=False, external_dict=None, labeled=False
+):
     """ This function returns a labeled BASIC listing. """
     jump_list = None
-    Lexer = generate_lexer(basic_type, label=True)
-    original_line_numbers = sanity_check_listing(Lexer, numbered_file)
-    jump_targets = extract_jump_targets(Lexer, numbered_file, original_line_numbers)
-    if extract:
-        jump_list_int = [int(a) for a in jump_targets]
-        sorted_jump_list_int = sorted(jump_list_int)
-        jump_list = ["_" + str(a) for a in sorted_jump_list_int]
-    if external_dict:
-        labeled_list = output_basic_listing(
-            Lexer, numbered_file, jump_targets, basic_type, external_dict
-        )
+    if labeled:
+        Lexer = generate_lexer(basic_type, renum=True)
+        numbered_file = strip_file(numbered_file)
+        if extract:
+            label_dict, line_replacement = populate_label_data(Lexer, numbered_file)  # type: ignore # pylint: disable=unused-variable
+            jump_list = [k for k in label_dict]
+        if external_dict:
+            labeled_list = replace_in_labeled_file(
+                Lexer, numbered_file, external_dict=external_dict
+            )
+        else:
+            labeled_list = replace_in_labeled_file(Lexer, numbered_file)
+        pass
     else:
-        labeled_list = output_basic_listing(
-            Lexer, numbered_file, jump_targets, basic_type
-        )
+        Lexer = generate_lexer(basic_type, label=True)
+        original_line_numbers = sanity_check_listing(Lexer, numbered_file)
+        jump_targets = extract_jump_targets(Lexer, numbered_file, original_line_numbers)
+        if extract:
+            jump_list_int = [int(a) for a in jump_targets]
+            sorted_jump_list_int = sorted(jump_list_int)
+            jump_list = ["_" + str(a) for a in sorted_jump_list_int]
+        if external_dict:
+            labeled_list = output_basic_listing(
+                Lexer, numbered_file, jump_targets, basic_type, external_dict
+            )
+        else:
+            labeled_list = output_basic_listing(
+                Lexer, numbered_file, jump_targets, basic_type
+            )
     labeled_file = labeled_list.splitlines()
     return labeled_file, jump_list
