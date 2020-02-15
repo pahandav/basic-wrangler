@@ -171,8 +171,13 @@ def renum(args):
 
 def convert(args):
     """ Converts between listing formats. """
-    input_filename = args.input_filename
-    user_filename = args.output_filename
+    input_filename = Path(args.input_filename)
+    input_filename = input_filename.absolute()
+    if args.output_filename:
+        user_filename = Path(args.output_filename)
+        user_filename = user_filename.absolute()
+    else:
+        user_filename = None
     if args.basic_type:
         if args.basic_type in TOKENIZER_NAME_CONVERSION:
             basic_type = TOKENIZER_NAME_CONVERSION[args.basic_type]
@@ -221,7 +226,9 @@ def convert(args):
     else:
         temp_filename = input_filename
     if not user_filename:
-        output_filename = temp_filename[0:-4] + "-out.bas"
+        output_filename = temp_filename.parent.joinpath(
+            temp_filename.stem + "-out" + temp_filename.suffix
+        )
     else:
         output_filename = temp_filename
     with open(output_filename, "w") as file:
