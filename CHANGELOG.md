@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.0 - 2020-02-14
+
+- Added tokenizers for Amiga ACE Compiler, Apple IIGS GSoft BASIC, and Acorn RISC OS.
+- Replaced the logging library with loguru.
+- The convert routine now extracts labels to an external file.
+- Said file can be modified to replace the label names that are outputted by the conversion routine.
+- This can be done to already converted files, as well.
+- Single-sourced the version number.
+
 ## 0.6.0 - 2020-02-11
 
 - Added Amstrad CPC, BBC Micro, Coleco ADAM, MSX, and Oric BASIC tokenizer rules.
