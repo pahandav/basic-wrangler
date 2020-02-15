@@ -9,12 +9,7 @@ import subprocess
 import sys
 import time
 
-# These are the files in the project with version numbers to bump.
-FILES_TO_CHANGE = [
-    "setup.py",
-    "src/basicwrangler/basicwrangler.py",
-    "inno/installer.iss",
-]
+VERSION_FILENAME = "src/basicwrangler/version.py"
 
 # Initial warnings.
 
@@ -36,9 +31,9 @@ print(
     "If yes, it will bump the number in whatever files you have listed in this script, and it will add the changes, commit the changes, and push those changes."
 )
 print("")
-with open("setup.py") as file:
+with open(VERSION_FILENAME) as file:
     setup_file = file.read()
-old_version_match = re.search(r"version=\"(?P<version>.*?)\"", setup_file)
+old_version_match = re.search(r"__version__ = \"(?P<version>.*?)\"", setup_file)
 old_version = old_version_match.group("version")
 print("The old version is: " + old_version)
 check = input("Do you want to bump your version number? (y/n)\n")
@@ -50,15 +45,14 @@ if check == "y":
     print("Bumping version number...")
     time.sleep(3)
     print("")
-    for filename in FILES_TO_CHANGE:
-        with open(filename) as file:
-            old_file = file.read()
-        new_file = re.sub(old_version, new_version, old_file)
-        with open(filename, "w") as file:
-            file.write(new_file)
+    with open(VERSION_FILENAME) as file:
+        old_file = file.read()
+    new_file = re.sub(old_version, new_version, old_file)
+    with open(VERSION_FILENAME, "w") as file:
+        file.write(new_file)
     print("")
     subprocess.call(["git", "add", "."], shell=True)
-    command = ["git", "commit"]
+    command = ["git", "commit", "-m", f"Bumped version to v{new_version} for release."]
     p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()
     print(stdout.decode("utf-8"))
@@ -216,7 +210,9 @@ print("Building Inno Setup Installer...")
 time.sleep(3)
 print("")
 # Builds the installer for the Windows version. Requires Inno Setup to be in your system path.
-subprocess.call(["iscc", r"inno\installer.iss"], shell=True)
+subprocess.call(
+    ["iscc", f"/dMyAppVersion={new_version}" r"inno\installer.iss"], shell=True
+)
 
 print("")
 print(

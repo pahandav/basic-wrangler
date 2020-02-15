@@ -19,6 +19,7 @@ import basicwrangler.renum.renumber as renumber
 # constants
 from basicwrangler.common.constants import NO_TOKENIZER, RE_QUOTES
 from basicwrangler.lex.genlex import generate_lexer, generate_splitter
+from basicwrangler.version import __version__
 
 # This is needed to make the GUI version work on Windows.
 if os.name == "nt":
@@ -37,7 +38,6 @@ if hasattr(sys, "_MEIPASS"):
 else:
     ICON_DIR = Path.joinpath(Path(__file__).resolve().parent, "icon")
 
-VERSION = "0.6.0"
 TOKENIZER_NAME_CONVERSION = {
     "pet": "cbm4",
     "vic20": "cbm2",
@@ -278,7 +278,7 @@ def convert(args):
                     "menuTitle": "About",
                     "name": "BASIC Wrangler",
                     "description": "A BASIC program listing line renumberer/cruncher",
-                    "version": VERSION,
+                    "version": __version__,
                     "copyright": "© 2020",
                     "website": "https://github.com/pahandav/basic-wrangler",
                     "license": "GPL v3",

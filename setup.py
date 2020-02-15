@@ -1,8 +1,17 @@
+import re
+
 import setuptools
+
+VERSION_FILENAME = "src/basicwrangler/version.py"
+
+with open(VERSION_FILENAME) as file:
+    setup_file = file.read()
+version_match = re.search(r"__version__ = \"(?P<version>.*?)\"", setup_file)
+__version__ = version_match.group("version")
 
 setuptools.setup(
     name="basic-wrangler",  # Replace with your own username
-    version="0.6.0",
+    version=__version__,
     author="pahandav",
     author_email="34494459+pahandav@users.noreply.github.com",
     description="A BASIC program listing line renumberer/cruncher (aka, a minifier).",
