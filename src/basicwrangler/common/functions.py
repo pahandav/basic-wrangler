@@ -81,3 +81,13 @@ def reformat_data_statements(input_file, basic_defs):
     output_file.append(data_statement)
     output_file = list(filter(None, output_file))
     return output_file
+
+
+def create_external_file_dict(external_file):
+    """ Returns a dict of labels or variables to replace. """
+    external_dict = {}
+    for line in external_file:
+        current_list = line.split(" ")
+        if len(current_list) > 1:
+            external_dict[current_list[0]] = current_list[1]
+    return external_dict

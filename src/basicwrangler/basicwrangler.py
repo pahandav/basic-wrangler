@@ -178,6 +178,7 @@ def convert(args):
         user_filename = user_filename.absolute()
     else:
         user_filename = None
+    external_data_file = None
     if args.basic_type:
         if args.basic_type in TOKENIZER_NAME_CONVERSION:
             basic_type = TOKENIZER_NAME_CONVERSION[args.basic_type]
@@ -214,7 +215,23 @@ def convert(args):
             new_file.append(new_line)
         working_file = new_file
     if not args.c64_list:
-        working_file = label.label_listing(working_file, basic_type)
+        external_data_filename = input_filename.with_suffix(".lbl")
+        if not external_data_filename.exists():
+            working_file, jump_list = label.label_listing(
+                working_file, basic_type, extract=True
+            )
+            external_data_file = "\n".join(jump_list)
+            with open(external_data_filename, "w") as file:
+                file.write(external_data_file)
+            print(f"Saved list of labels to {external_data_filename}")
+        if external_data_filename.exists():
+            with open(external_data_filename) as file:
+                external_file = file.read()
+            split_external_file = external_file.splitlines()
+            external_dict = functions.create_external_file_dict(split_external_file)
+            working_file, jump_list = label.label_listing(
+                working_file, basic_type, external_dict=external_dict
+            )
     if args.c64_list:
         working_file = helpers.c64_list(working_file)
     if args.data_formatter:

@@ -85,7 +85,9 @@ def extract_jump_targets(Lexer, numbered_file, original_line_numbers):
     return jump_targets
 
 
-def output_basic_listing(Lexer, numbered_file, jump_targets, basic_type):
+def output_basic_listing(
+    Lexer, numbered_file, jump_targets, basic_type, external_dict={}
+):
     """ Final pass - This function returns the labelled BASIC file. """
     logger.debug("Converting to labeled format.")
     labeled_file = ""
@@ -100,7 +102,19 @@ def output_basic_listing(Lexer, numbered_file, jump_targets, basic_type):
                 # Insert a jump target.
                 if token.val in jump_targets:
                     logger.debug("Jump target at line number: {}", token.val)
-                    labeled_file = labeled_file + "\n" + "_" + token.val + ":" + "\n"
+                    check_value = "_" + token.val
+                    if check_value in external_dict:
+                        labeled_file = (
+                            labeled_file
+                            + "\n"
+                            + external_dict[check_value]
+                            + ":"
+                            + "\n"
+                        )
+                    else:
+                        labeled_file = (
+                            labeled_file + "\n" + "_" + token.val + ":" + "\n"
+                        )
                     continue
                 continue
             if (
@@ -123,8 +137,12 @@ def output_basic_listing(Lexer, numbered_file, jump_targets, basic_type):
                 # Output valid labels.
                 if set_on and token.type == "NUMBER":
                     current_value = "_" + token.val
+                    if current_value in external_dict:
+                        current_value = external_dict[current_value]
                 elif set_flow and not set_on:
                     current_value = "_" + token.val
+                    if current_value in external_dict:
+                        current_value = external_dict[current_value]
                     set_flow = False
                 # ON handling.
                 elif (
@@ -164,8 +182,12 @@ def output_basic_listing(Lexer, numbered_file, jump_targets, basic_type):
                 # Output valid labels.
                 if set_on and token.type == "NUMBER":
                     current_value = "_" + token.val
+                    if current_value in external_dict:
+                        current_value = external_dict[current_value]
                 elif set_flow and not set_on:
                     current_value = "_" + token.val
+                    if current_value in external_dict:
+                        current_value = external_dict[current_value]
                     set_flow = False
                 # ON handling.
                 elif (
@@ -212,11 +234,23 @@ def output_basic_listing(Lexer, numbered_file, jump_targets, basic_type):
     return labeled_file
 
 
-def label_listing(numbered_file, basic_type):
+def label_listing(numbered_file, basic_type, *, extract=False, external_dict=None):
     """ This function returns a labeled BASIC listing. """
+    jump_list = None
     Lexer = generate_lexer(basic_type, label=True)
     original_line_numbers = sanity_check_listing(Lexer, numbered_file)
     jump_targets = extract_jump_targets(Lexer, numbered_file, original_line_numbers)
-    labeled_list = output_basic_listing(Lexer, numbered_file, jump_targets, basic_type)
+    if extract:
+        jump_list_int = [int(a) for a in jump_targets]
+        sorted_jump_list_int = sorted(jump_list_int)
+        jump_list = ["_" + str(a) for a in sorted_jump_list_int]
+    if external_dict:
+        labeled_list = output_basic_listing(
+            Lexer, numbered_file, jump_targets, basic_type, external_dict
+        )
+    else:
+        labeled_list = output_basic_listing(
+            Lexer, numbered_file, jump_targets, basic_type
+        )
     labeled_file = labeled_list.splitlines()
-    return labeled_file
+    return labeled_file, jump_list
