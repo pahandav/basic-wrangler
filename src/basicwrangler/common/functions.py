@@ -1,7 +1,8 @@
 """ This module contains functions that are accessed from multiple other modules. """
 
-import logging
 import re
+
+from loguru import logger
 
 from basicwrangler.common.constants import RE_QUOTES
 from basicwrangler.lex.lexer import LexerError
@@ -9,15 +10,15 @@ from basicwrangler.lex.lexer import LexerError
 
 def tokenize_line(Lexer, untokenized_line, line_no):
     """ This function returns an untokenized line as a list of tokens. """
-    logging.debug("Tokenizing line number: %s", line_no + 1)
+    logger.debug("Tokenizing line number: {}", line_no + 1)
     Lexer.input(untokenized_line)
     token_list = []
     try:
         for tok in Lexer.tokens():
-            logging.debug("Token: %s", tok)
+            logger.debug("Token: {}", tok)
             token_list.append(tok)
     except LexerError as err:
-        print("LexerError at position %s in line number %s" % (err.pos, line_no + 1))
+        print(f"LexerError at position {err.pos} in line number {line_no + 1}")
     return token_list
 
 
@@ -46,7 +47,7 @@ def reformat_data_statements(input_file, basic_defs):
         data_statement_length = basic_defs.data_length - 9
     if basic_defs.crunch != 1:
         data_statement_length += 1
-    logging.debug("DATA Statement Reformatter Start.")
+    logger.debug("DATA Statement Reformatter Start.")
     output_file = []
     for index, line in enumerate(input_file):
         if line.startswith("#data"):
@@ -59,7 +60,7 @@ def reformat_data_statements(input_file, basic_defs):
     data_block = []
     for index in range(start_data_block, end_data_block):
         data_block.append(input_file[index])
-    logging.debug("DATA Block: %s", data_block)
+    logger.debug("DATA Block: {}", data_block)
     if basic_defs.crunch == 1:
         data_statement_start = "DATA"
     else:
@@ -73,10 +74,10 @@ def reformat_data_statements(input_file, basic_defs):
             data_statement = data_statement.rstrip(",")
             output_file.append(data_statement)
             data_statement = data_statement_start + line + ","
-            logging.debug("DATA Statement: %s", data_statement)
-        logging.debug("DATA Statement: %s", data_statement)
+            logger.debug("DATA Statement: {}", data_statement)
+        logger.debug("DATA Statement: {}", data_statement)
     data_statement = data_statement.rstrip(",")
-    logging.debug("DATA Statement: %s", data_statement)
+    logger.debug("DATA Statement: {}", data_statement)
     output_file.append(data_statement)
     output_file = list(filter(None, output_file))
     return output_file

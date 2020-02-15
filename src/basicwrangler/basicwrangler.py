@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 """ basic-wrangler - A BASIC program listing line renumberer/cruncher. """
 
-import logging
 import os
 import re
 import sys
 from pathlib import Path
 
-import duallog
 import pyperclip
 from gooey import Gooey, GooeyParser
+from loguru import logger
 
 import basicwrangler.common.functions as functions
 import basicwrangler.convert.helpers as helpers
@@ -95,7 +94,7 @@ def renum(args):
     working_file = renumber.renumber_basic_file(
         Lexer, working_file, basic_defs, label_dict, line_replacement, basic_type
     )
-    logging.debug("Labels and Computed Line Numbers: %s", label_dict)
+    logger.debug("Labels and Computed Line Numbers: {}", label_dict)
 
     # abbreviate statements if needed
     if basic_defs.abbreviate:
@@ -256,7 +255,9 @@ def convert(args):
 )
 def main():
     """ The main function. """
-    duallog.setup("logs")
+    logger.remove()
+    logger.add(sys.stderr, level="WARNING")
+    logger.add("logs/{time:YYYYMMDD-HHmmss}.log")
 
     # set up argument parser and get arguments
     parser = GooeyParser(

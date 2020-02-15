@@ -1,14 +1,15 @@
 """ This module contains former helper scripts. """
 
-import logging
 import re
+
+from loguru import logger
 
 from basicwrangler.common.constants import RE_QUOTES
 
 
 def c64_list(input_file):
     """ This converts from C64List format. """
-    logging.debug("Convert from C64List format.")
+    logger.debug("Convert from C64List format.")
     for index, _ in enumerate(input_file):
         if input_file[index].startswith("{:") and input_file[index].endswith("}"):
             input_file[index] = input_file[index].replace("{:", "_")
@@ -23,7 +24,7 @@ def c64_list(input_file):
 
 def data_format(input_file):
     """ This reformats DATA statements. """
-    logging.debug("Reformatting DATA Statements into newline-delimitted format.")
+    logger.debug("Reformatting DATA Statements into newline-delimitted format.")
     data_statement = "\n#data\n"
     remove_list = []
     for index, line in enumerate(input_file):
@@ -35,7 +36,7 @@ def data_format(input_file):
             temp = re.sub("," + RE_QUOTES, "\n", temp)
             temp = temp.lstrip()
             data_statement = data_statement + temp
-            logging.debug("Current DATA block: %s", data_statement)
+            logger.debug("Current DATA block: {}", data_statement)
             remove_list.append(index)
     data_statement = data_statement + "#enddata"
     # This removes the original DATA statements from the file

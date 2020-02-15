@@ -1,8 +1,9 @@
 """ This module contains the line number renumbering routines. """
 # pylint: disable=bad-continuation
-import logging
 import re
 import sys
+
+from loguru import logger
 
 from basicwrangler.common.constants import CBM_BASIC, RE_QUOTES
 from basicwrangler.common.functions import tokenize_line
@@ -13,7 +14,7 @@ SINCLAIR_BASIC = ["zx81", "zxspectrum"]
 def populate_label_data(Lexer, working_file):
     """ This function populates a dictionary with labels and determines
         how many bytes to assume when replacing a line label. """
-    logging.debug("Populating Label Dictionary.")
+    logger.debug("Populating Label Dictionary.")
     file_length = len(working_file)
     line_count = 0
     label_dict = {}
@@ -24,9 +25,9 @@ def populate_label_data(Lexer, working_file):
             label = tokenized_line[0].val.rstrip(":")
             label_dict[label] = 0
             line_count += 1
-            logging.debug("Label: %s", label)
+            logger.debug("Label: {}", label)
     lines_total = file_length - line_count
-    logging.debug("Total number of lines: %s", lines_total)
+    logger.debug("Total number of lines: {}", lines_total)
     # determine how many bytes are needed when replacing labels
     if lines_total < 10:
         line_replacement = 1
@@ -38,8 +39,8 @@ def populate_label_data(Lexer, working_file):
         line_replacement = 4
     else:
         line_replacement = 5
-    logging.debug("Line replacement value: %s", line_replacement)
-    logging.debug("Labels: %s", label_dict)
+    logger.debug("Line replacement value: {}", line_replacement)
+    logger.debug("Labels: {}", label_dict)
     return label_dict, line_replacement
 
 
@@ -65,13 +66,13 @@ def crunch_line(tokenized_line, label_dict, line_replacement, line_no, basic_def
         If crunch is 0, it will join with spaces,
         and if crunch is 1 it will join with no spaces. """
     tokenized_line_length = len(tokenized_line)
-    logging.debug("Tokenizing line %s.", line_no)
+    logger.debug("Tokenizing line {}.", line_no)
     current_line_length = 0
     current_buffer = ""
     for index, token in enumerate(tokenized_line):
         current_value = ""
         if token.type == "LINE":
-            logging.critical(
+            logger.critical(
                 "This listing appears to be numbered BASIC. Check your filename."
             )
             sys.exit(1)
@@ -205,7 +206,7 @@ def crunch_line(tokenized_line, label_dict, line_replacement, line_no, basic_def
 
 def start_new_line(current_line_number):
     """ Starts a new BASIC line. """
-    logging.debug("Starting new BASIC line.")
+    logger.debug("Starting new BASIC line.")
     current_line = str(current_line_number)
     current_line_length = len(current_line)
     return current_line, current_line_length
@@ -215,13 +216,13 @@ def renumber_basic_file(
     Lexer, input_file, basic_defs, label_dict, line_replacement, basic_type
 ):
     """ The main renumbering routine. """
-    logging.debug("Numbering BASIC listing.")
+    logger.debug("Numbering BASIC listing.")
     output_file = []
     current_line_number = basic_defs.numbering
     persistent_buffer, persistent_line_length = start_new_line(current_line_number)
     for line_no, line in enumerate(input_file):
         tokenized_line = tokenize_line(Lexer, line, line_no)
-        logging.debug("Persistent Buffer: %s", persistent_buffer)
+        logger.debug("Persistent Buffer: {}", persistent_buffer)
         # routine for jump targets
         if tokenized_line[0].type == "LABEL":
             label = tokenized_line[0].val.rstrip(":")
@@ -234,24 +235,23 @@ def renumber_basic_file(
                 current_line_number = current_line_number + basic_defs.increment
             else:
                 label_dict[label] = current_line_number
-            logging.debug("Persistent Buffer: %s", persistent_buffer)
+            logger.debug("Persistent Buffer: {}", persistent_buffer)
             persistent_buffer, persistent_line_length = start_new_line(
                 current_line_number
             )
             continue
         # tokenizes lines, determines line length, and sets the current buffer to the tokenized line
-        logging.debug("Current tokenized line: %s", tokenized_line)
         current_buffer_length, current_buffer = crunch_line(
             tokenized_line, label_dict, line_replacement, line_no, basic_defs
         )
-        logging.debug("Current buffer length: %s", current_buffer_length)
-        logging.debug("Current Buffer: %s", current_buffer)
+        logger.debug("Current buffer length: {}", current_buffer_length)
+        logger.debug("Current Buffer: {}", current_buffer)
         # when lines don't need to be combined
         if not basic_defs.combine:
             persistent_buffer = persistent_buffer + current_buffer
             output_file.append(persistent_buffer)
             current_line_number = current_line_number + basic_defs.increment
-            logging.debug("Persistent Buffer: %s", persistent_buffer)
+            logger.debug("Persistent Buffer: {}", persistent_buffer)
             persistent_buffer, persistent_line_length = start_new_line(
                 current_line_number
             )
@@ -262,7 +262,7 @@ def renumber_basic_file(
                 + len(basic_defs.statement_joining_character)
                 + current_buffer_length
             )
-            logging.debug("Combined line length: %s", combined_line_length)
+            logger.debug("Combined line length: {}", combined_line_length)
             need_new_line = check_new_line(tokenized_line)
             # when a new line is mandatory
             if need_new_line:
@@ -278,14 +278,14 @@ def renumber_basic_file(
                     )
                     output_file.append(persistent_buffer)
                     current_line_number = current_line_number + basic_defs.increment
-                    logging.debug("Persistent Buffer: %s", persistent_buffer)
+                    logger.debug("Persistent Buffer: {}", persistent_buffer)
                     persistent_buffer, persistent_line_length = start_new_line(
                         current_line_number
                     )
                     persistent_buffer = persistent_buffer + current_buffer
                     output_file.append(persistent_buffer)
                     current_line_number = current_line_number + basic_defs.increment
-                    logging.debug("Persistent Buffer: %s", persistent_buffer)
+                    logger.debug("Persistent Buffer: {}", persistent_buffer)
                     persistent_buffer, persistent_line_length = start_new_line(
                         current_line_number
                     )
@@ -293,7 +293,7 @@ def renumber_basic_file(
                     persistent_buffer = persistent_buffer + current_buffer
                     output_file.append(persistent_buffer)
                     current_line_number = current_line_number + basic_defs.increment
-                    logging.debug("Persistent Buffer: %s", persistent_buffer)
+                    logger.debug("Persistent Buffer: {}", persistent_buffer)
                     persistent_buffer, persistent_line_length = start_new_line(
                         current_line_number
                     )
@@ -303,14 +303,14 @@ def renumber_basic_file(
                     )
                     output_file.append(persistent_buffer)
                     current_line_number = current_line_number + basic_defs.increment
-                    logging.debug("Persistent Buffer: %s", persistent_buffer)
+                    logger.debug("Persistent Buffer: {}", persistent_buffer)
                     persistent_buffer, persistent_line_length = start_new_line(
                         current_line_number
                     )
                     persistent_buffer = persistent_buffer + current_buffer
                     output_file.append(persistent_buffer)
                     current_line_number = current_line_number + basic_defs.increment
-                    logging.debug("Persistent Buffer: %s", persistent_buffer)
+                    logger.debug("Persistent Buffer: {}", persistent_buffer)
                     persistent_buffer, persistent_line_length = start_new_line(
                         current_line_number
                     )
@@ -326,7 +326,7 @@ def renumber_basic_file(
                 )
                 output_file.append(persistent_buffer)
                 current_line_number = current_line_number + basic_defs.increment
-                logging.debug("Persistent Buffer: %s", persistent_buffer)
+                logger.debug("Persistent Buffer: {}", persistent_buffer)
                 persistent_buffer, persistent_line_length = start_new_line(
                     current_line_number
                 )
@@ -347,7 +347,7 @@ def renumber_basic_file(
             line_number = line[
                 line_number_match.span()[0] : line_number_match.span()[1]
             ]
-            logging.warning("Line number %s may be too long.", line_number)
+            logger.warning("Line number {} may be too long.", line_number)
     # add space in between line number and rest of line for certain basic versions
     if basic_type in ["bascom", "amiga"] or basic_type.startswith("zx"):
         for index, line in enumerate(output_file):

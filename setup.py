@@ -29,7 +29,7 @@ setuptools.setup(
         "Release Thread": "https://atariage.com/forums/topic/297649-basic-wrangler-a-line-cruncherrenumberer/",
         "Blog": "https://oldschoolbasic.blogspot.com/",
     },
-    install_requires=["pyperclip", "Gooey", "PyYAML", "duallog"],
+    install_requires=["pyperclip", "Gooey", "PyYAML", "loguru"],
     python_requires=">=3.6",
     entry_points={"console_scripts": ["bw = basicwrangler.basicwrangler:main",],},
     long_description=""" # BASIC Wrangler

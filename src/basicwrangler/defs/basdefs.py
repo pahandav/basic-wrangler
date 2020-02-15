@@ -1,11 +1,11 @@
 """ This module processes the BASIC definitions. """
-import logging
 import re
 import sys
 from collections import namedtuple
 from pathlib import Path
 
 import yaml
+from loguru import logger
 
 from basicwrangler.common.constants import NO_TOKENIZER, RE_QUOTES
 
@@ -18,7 +18,7 @@ else:
 
 def abbreviate(working_file, basic_type, reverse_this=False):
     """ Returns the file with keywords abbreviated or with the abbreviations removed. """
-    logging.debug("Converting to/from abbreviated format.")
+    logger.debug("Converting to/from abbreviated format.")
     yaml_path = Path.joinpath(SCRIPT_DIR, "abbrevs.yaml")
     with open(yaml_path) as yaml_file:
         yaml_dict = yaml.safe_load(yaml_file)
@@ -120,5 +120,5 @@ def set_basic_defs(basic_type, paste_format, basic_line_length, numbering, incre
         data_length,
         paste_format,
     )
-    logging.debug("BASIC Definitions: %s", basic_defs)
+    logger.debug("BASIC Definitions: {}", basic_defs)
     return basic_defs, paste_format

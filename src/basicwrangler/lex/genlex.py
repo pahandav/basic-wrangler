@@ -1,10 +1,10 @@
 """ This module contains functions to generate lexers. """
 
-import logging
 import sys
 from pathlib import Path
 
 import yaml
+from loguru import logger
 
 import basicwrangler.lex.lexer as lexer
 
@@ -74,7 +74,7 @@ def generate_lexer(basic_type, *, label=False, renum=False):
     for key in regex_dict_order:
         temp_tuple = (regex_dict[key], key)
         rules.append(temp_tuple)
-    logging.debug("Lexer Rules: %s", rules)
+    logger.debug("Lexer Rules: {}", rules)
     if basic_type.startswith("cbm") and label:
         lx = lexer.Lexer(rules, skip_whitespace=True, ignore_case=True)
     else:
