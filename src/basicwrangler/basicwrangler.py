@@ -229,7 +229,7 @@ def convert(args):
             with open(external_data_filename, "w") as file:
                 file.write(external_data_file)
             print(f"Saved list of labels to {external_data_filename}")
-        if external_data_filename.exists():
+        elif external_data_filename.exists():
             with open(external_data_filename) as file:
                 external_file = file.read()
             split_external_file = external_file.splitlines()

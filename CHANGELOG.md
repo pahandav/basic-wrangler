@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.1 - 2020-02-18
+
+- Fixed a bug that was causing the convert routine to run twice, causing an exception.
+
 ## 0.7.0 - 2020-02-14
 
 - Added tokenizers for Amiga ACE Compiler, Apple IIGS GSoft BASIC, and Acorn RISC OS.
